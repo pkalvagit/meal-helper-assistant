@@ -1,0 +1,121 @@
+{
+  "guardrail_tests": [
+    {
+      "query": "Find me Italian restaurants near me",
+      "expected_valid": true,
+      "description": "Valid restaurant query"
+    },
+    {
+      "query": "Tell me a joke",
+      "expected_valid": false,
+      "description": "Off-topic query"
+    },
+    {
+      "query": "What's the weather like?",
+      "expected_valid": false,
+      "description": "Unrelated question"
+    },
+    {
+      "query": "I want high protein food under $15",
+      "expected_valid": true,
+      "description": "Valid food query with constraints"
+    },
+    {
+      "query": "Write me a Python function",
+      "expected_valid": false,
+      "description": "Programming request"
+    }
+  ],
+
+  "safety_tests": [
+    {
+      "user_profile": {
+        "name": "Test User",
+        "allergies": ["peanuts", "shellfish"],
+        "dietary_restrictions": ["no_beef"],
+        "budget": {"max_per_meal": 15.0}
+      },
+      "menu_items": [
+        {
+          "name": "Peanut Butter Sandwich",
+          "price": "$8.99",
+          "description": "Made with organic peanut butter",
+          "ingredients": ["bread", "peanut butter", "jelly"]
+        },
+        {
+          "name": "Shrimp Pasta",
+          "price": "$14.99",
+          "description": "Fresh shrimp with garlic pasta",
+          "ingredients": ["pasta", "shrimp", "garlic"]
+        },
+        {
+          "name": "Grilled Chicken",
+          "price": "$12.99",
+          "description": "Grilled chicken breast with vegetables",
+          "ingredients": ["chicken", "broccoli", "carrots"]
+        },
+        {
+          "name": "Beef Burger",
+          "price": "$10.99",
+          "description": "1/2 lb beef burger with fries",
+          "ingredients": ["beef", "bun", "lettuce", "tomato"]
+        },
+        {
+          "name": "Caesar Salad",
+          "price": "$9.99",
+          "description": "Romaine lettuce with Caesar dressing",
+          "ingredients": ["lettuce", "croutons", "parmesan"]
+        }
+      ],
+      "expected_safe_items": ["Grilled Chicken", "Caesar Salad"],
+      "expected_filtered": ["Peanut Butter Sandwich", "Shrimp Pasta", "Beef Burger"],
+      "description": "Must filter allergens and restrictions"
+    }
+  ],
+
+  "intent_extraction_tests": [
+    {
+      "query": "I want Italian food near downtown",
+      "expected": {
+        "query_type": "search",
+        "cuisine": "italian"
+      }
+    },
+    {
+      "query": "Find me something under $12 with high protein",
+      "expected": {
+        "query_type": "search",
+        "price_range": {"max": 12},
+        "dietary_requirements": ["high_protein"]
+      }
+    },
+    {
+      "query": "Show me vegan options",
+      "expected": {
+        "query_type": "filter",
+        "dietary_requirements": ["vegan"]
+      }
+    }
+  ],
+
+  "end_to_end_tests": [
+    {
+      "user_profile": {
+        "name": "Test User",
+        "allergies": ["peanuts"],
+        "dietary_restrictions": [],
+        "budget": {"max_per_meal": 15.0},
+        "location": {"lat": 38.9586, "lng": -77.3570, "radius": 5000}
+      },
+      "query": "Find high protein lunch under $12",
+      "expected_behavior": {
+        "calls_search": true,
+        "applies_filters": true,
+        "respects_budget": true,
+        "no_allergens": true,
+        "min_recommendations": 1
+      },
+      "description": "Full pipeline test"
+    }
+  ]
+}
