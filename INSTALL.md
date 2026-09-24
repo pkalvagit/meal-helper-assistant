@@ -38,25 +38,29 @@ source .venv/bin/activate
 ### 2. Install Dependencies
 
 ```bash
-# Upgrade pip
+# Option A: Use requirements.txt (Recommended)
+pip install -r requirements.txt
+
+# IMPORTANT: Install Playwright browsers (not automatic!)
+playwright install
+
+# Option B: Manual install
 pip install --upgrade pip
-
-# Core
 pip install pydantic pydantic-settings python-dotenv pyyaml
-
-# LangChain
 pip install langchain langchain-core langchain-community
-
-# LLM Providers
 pip install langchain-anthropic anthropic
 pip install langchain-openai openai
-
-# Utilities
-pip install requests beautifulsoup4
-
-# CLI
+pip install requests beautifulsoup4 playwright
 pip install typer rich
+
+# Then install Playwright browsers
+playwright install
 ```
+
+**Why `playwright install`?**
+- The `pip install playwright` only installs the Python package
+- Browser binaries (~500MB) must be downloaded separately
+- See `PLAYWRIGHT_SETUP.md` for details
 
 ### 3. Verify Installation
 
@@ -171,6 +175,27 @@ You: _
 ---
 
 ## Troubleshooting
+
+### Playwright Error: "Run: playwright install"
+
+**Problem:**
+```bash
+Error: Playwright executable doesn't exist
+Run: playwright install
+```
+
+**Solution:**
+```bash
+source .venv/bin/activate
+playwright install
+```
+
+**Why:** Playwright browsers aren't installed automatically with pip. See `PLAYWRIGHT_SETUP.md` for details.
+
+**Quick fix for both laptops:**
+```bash
+./setup_environment.sh
+```
 
 ### ImportError: No module named 'X'
 

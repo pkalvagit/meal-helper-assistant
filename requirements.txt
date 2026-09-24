@@ -16,7 +16,7 @@ pyyaml>=6.0
 # Web scraping & data
 requests>=2.32
 beautifulsoup4>=4.12
-playwright>=1.40
+playwright>=1.40           # IMPORTANT: After pip install, run: playwright install
 markdownify>=0.11
 pypdf>=6.0          # PDF menu extraction
 Pillow>=10.0
