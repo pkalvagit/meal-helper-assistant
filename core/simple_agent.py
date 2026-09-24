@@ -117,11 +117,12 @@ class SimpleMealHelperAgent:
             console.print(f"[cyan]🔍 Searching for {query}...[/cyan]")
             self.logger.info(f"Searching for: {query}")
 
-            search_results = search_restaurants_nearby.invoke({
+            search_results = search_restaurants_by_query.invoke({
+                "query": query,
                 "lat": lat,
                 "lng": lng,
                 "radius": self.search_radius,
-                "query": query
+                "max_results": int(os.getenv("SEARCH_MAX_RESULTS", "20"))
             })
 
             if not search_results or len(search_results) == 0:
@@ -220,15 +221,15 @@ CRITICAL: NEVER HALLUCINATE MENU ITEMS
 Available tools and COMPLETE WORKFLOW:
 
 ⚠️ CRITICAL WORKFLOW RULE ⚠️
-NEVER respond to the user after search_restaurants_nearby without first fetching menus!
-You MUST call get_restaurant_menu immediately after search_restaurants_nearby.
+NEVER respond to the user after search_restaurants_by_query without first fetching menus!
+You MUST call get_restaurant_menu immediately after search_restaurants_by_query.
 DO NOT return intermediate results like "I found these restaurants" - fetch menus first!
 
 WORKFLOW: Search → Get Menus → Filter → Recommend
 (Execute ALL steps before responding to user)
 
 Step 1: SEARCH - Find restaurants
-Tool: search_restaurants_nearby
+Tool: search_restaurants_by_query
 Returns: [{"name": "Restaurant Name", "website": "https://example.com", "address": "...", "rating": 4.5}]
 ⚠️ DO NOT respond to user yet - continue to Step 2!
 
@@ -249,7 +250,7 @@ Returns: Filtered list of safe items
 Step 4: RECOMMEND - NOW you can respond to user with formatted recommendations
 
 CRITICAL EXECUTION RULES:
-1. NEVER respond after search_restaurants_nearby - always fetch menus first
+1. NEVER respond after search_restaurants_by_query - always fetch menus first
 2. Fetch menus for at least 2 restaurants (if they have websites)
 3. If ALL menu fetches fail, THEN tell user "couldn't fetch menu data"
 4. Complete Steps 1-3 in ONE workflow run before giving final answer
@@ -285,7 +286,7 @@ When you need to use a tool, respond with ONLY the JSON (no extra text):
 
 ⚠️ MINIMUM TOOL CHAIN FOR FOOD RECOMMENDATIONS ⚠️
 If user asks for food recommendations, you MUST call at least these tools IN SEQUENCE:
-1. search_restaurants_nearby (find restaurants)
+1. search_restaurants_by_query (find restaurants)
 2. get_restaurant_menu (for at least 1 restaurant from step 1)
 3. filter_menu_by_user_profile (apply constraints)
 
@@ -293,7 +294,7 @@ EXAMPLE OF CORRECT WORKFLOW:
 User: "find biryani under $25 near me"
 
 Step 1 - Your response:
-{"tool": "search_restaurants_nearby", "arguments": {"lat": 38.9586, "lng": -77.357, "radius": 5000, "query": "biryani"}, "reasoning": "Search for restaurants"}
+{"tool": "search_restaurants_by_query", "arguments": {"query": "biryani", "lat": 38.9586, "lng": -77.357, "radius": 5000, "max_results": 20}, "reasoning": "Search for biryani restaurants"}
 
 [Tool returns: [{"name": "Masti", "website": "http://mastiusa.com", ...}]]
 
