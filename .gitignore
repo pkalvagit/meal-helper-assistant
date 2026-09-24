@@ -37,3 +37,6 @@ Thumbs.db
 
 # Playwright
 .playwright/
+
+cache/*
+logs/*

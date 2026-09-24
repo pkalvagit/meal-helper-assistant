@@ -16,6 +16,15 @@ from core.models import UserProfile, AgentResponse
 from core.logger import log_tool_call, log_tool_result, log_error
 from core.stats_logger import StatsLogger
 from core.batch_agent import BatchMenuProcessor
+from core.query_parser import QueryParser
+
+# Add path for utils
+import sys
+from pathlib import Path
+utils_path = Path(__file__).parent.parent / "utils"
+sys.path.insert(0, str(utils_path))
+
+from location_service import get_location, get_current_location_from_ip
 from tools.search_tool import search_restaurants_nearby, search_restaurants_by_query
 from tools.menu_tool import (
     get_restaurant_menu,
@@ -113,12 +122,19 @@ class SimpleMealHelperAgent:
         console = Console()
 
         try:
-            # Step 1: Search for restaurants
-            console.print(f"[cyan]🔍 Searching for {query}...[/cyan]")
-            self.logger.info(f"Searching for: {query}")
+            # Step 1: Parse query to extract food intent (remove price/location noise)
+            parsed_query = QueryParser.extract_food_query(query)
+
+            if parsed_query != query.lower().strip():
+                self.logger.info(f"Parsed query: '{query}' -> '{parsed_query}'")
+                console.print(f"[dim]Searching for: {parsed_query}[/dim]")
+
+            # Step 2: Search for restaurants
+            console.print(f"[cyan]🔍 Searching for {parsed_query}...[/cyan]")
+            self.logger.info(f"Searching for: {parsed_query}")
 
             search_results = search_restaurants_by_query.invoke({
-                "query": query,
+                "query": parsed_query,
                 "lat": lat,
                 "lng": lng,
                 "radius": self.search_radius,
@@ -135,7 +151,7 @@ class SimpleMealHelperAgent:
 
             self.logger.info(f"Found {len(search_results)} restaurants")
 
-            # Step 2: Batch fetch ALL menus (with error handling)
+            # Step 3: Batch fetch ALL menus (with error handling)
             console.print(f"[yellow]📋 Fetching menus from {min(len(search_results), self.batch_size)} restaurants...[/yellow]")
 
             menus = self.batch_processor.fetch_all_menus(
@@ -144,14 +160,23 @@ class SimpleMealHelperAgent:
             )
 
             if not menus:
+                # Check if restaurants had websites
+                with_websites = sum(1 for r in search_results if r.get("website"))
+                without_websites = len(search_results) - with_websites
+
+                if without_websites == len(search_results):
+                    error_msg = f"Found {len(search_results)} restaurants, but none have websites available for menu scraping. Try a more specific search (e.g., 'biryani', 'pizza', or a restaurant name)."
+                else:
+                    error_msg = f"Found {len(search_results)} restaurants ({with_websites} with websites), but couldn't fetch any menus. Try a different search query."
+
                 return {
                     "success": False,
-                    "error": "Could not fetch any menus",
+                    "error": error_msg,
                     "restaurants": search_results,
                     "filtered_items": []
                 }
 
-            # Step 3: Filter combined menus
+            # Step 4: Filter combined menus
             console.print(f"[green]✓ Filtering menu items...[/green]")
 
             filter_result = self.batch_processor.filter_combined_menus(
@@ -182,6 +207,61 @@ class SimpleMealHelperAgent:
                 "restaurants": [],
                 "filtered_items": []
             }
+
+    def _extract_location_from_query(self, query: str) -> Optional[str]:
+        """
+        Extract location from user query.
+
+        Examples:
+            "pizza in New York" -> "New York"
+            "biryani near Boston" -> "Boston"
+            "burger at San Francisco" -> "San Francisco"
+            "meals in 17050" -> "17050"
+            "food near 90210" -> "90210"
+            "pizza near 123 Main St, Boston" -> "123 Main St, Boston"
+            "food at Times Square" -> "Times Square"
+
+        Returns:
+            Address string or None if no location specified
+        """
+        import re
+
+        # Patterns for location extraction (order matters - try specific first)
+        patterns = [
+            # ZIP codes only (5 digits)
+            r'\bin\s+(\d{5})(?:\s|$)',  # "in 17050"
+            r'\bnear\s+(\d{5})(?:\s|$)',  # "near 90210"
+            r'\bat\s+(\d{5})(?:\s|$)',  # "at 10001"
+            r'\baround\s+(\d{5})(?:\s|$)',  # "around 94102"
+
+            # ZIP+4 codes (5+4 digits)
+            r'\bin\s+(\d{5}-\d{4})',
+            r'\bnear\s+(\d{5}-\d{4})',
+
+            # Full addresses (capture everything after preposition)
+            # Matches: "123 Main Street, Boston MA", "5th Avenue, NY", "Times Square"
+            # Pattern: optional number, then capitalized word or number+text, then optional commas and more
+            r'\bin\s+((?:\d+\s+)?(?:[A-Z][a-z]*|\d+(?:st|nd|rd|th))[^,]*(?:,\s*[A-Z][^,]+)*(?:,?\s+[A-Z]{2})?(?:\s+\d{5})?)',
+            r'\bnear\s+((?:\d+\s+)?(?:[A-Z][a-z]*|\d+(?:st|nd|rd|th))[^,]*(?:,\s*[A-Z][^,]+)*(?:,?\s+[A-Z]{2})?(?:\s+\d{5})?)',
+            r'\bat\s+((?:\d+\s+)?(?:[A-Z][a-z]*|\d+(?:st|nd|rd|th))[^,]*(?:,\s*[A-Z][^,]+)*(?:,?\s+[A-Z]{2})?(?:\s+\d{5})?)',
+            r'\baround\s+((?:\d+\s+)?(?:[A-Z][a-z]*|\d+(?:st|nd|rd|th))[^,]*(?:,\s*[A-Z][^,]+)*(?:,?\s+[A-Z]{2})?(?:\s+\d{5})?)',
+
+            # Standalone ZIP at end of query
+            r'\s(\d{5})$',  # "meals 17050"
+        ]
+
+        for pattern in patterns:
+            match = re.search(pattern, query)
+            if match:
+                location = match.group(1).strip()
+
+                # Clean up: Remove trailing words like "under", "below", etc.
+                location = re.sub(r'\s+(under|below|within|less\s+than|for).*$', '', location, flags=re.IGNORECASE)
+
+                self.logger.debug(f"Extracted location '{location}' from query using pattern: {pattern}")
+                return location
+
+        return None
 
     def _build_system_prompt(self) -> str:
         """Build system prompt with user profile."""
@@ -416,18 +496,46 @@ This is a safety requirement - never recommend items with these allergens."""
         else:
             intent = None
 
-        # Step 2: Execute batch workflow if this is a meal request
-        if self.user_profile and self.user_profile.location:
-            # User has location - execute full workflow
-            # Support both formats: latitude/longitude or default_lat/default_lng
+        # Step 2: Resolve location (profile, query, or auto-detect)
+        lat, lng, location_source = None, None, None
+
+        # Priority 1: Check if user specified location in query
+        query_location = self._extract_location_from_query(user_message)
+        if query_location:
+            self.logger.info(f"Detected location in query: {query_location}")
+            result = get_location(query_location)
+            if result:
+                lat, lng, location_source = result
+                self.logger.info(f"Using query location: {location_source}")
+
+        # Priority 2: Use profile location
+        if not lat and self.user_profile and self.user_profile.location:
             lat = (self.user_profile.location.get("latitude") or
                    self.user_profile.location.get("default_lat") or
                    self.user_profile.location.get("lat"))
             lng = (self.user_profile.location.get("longitude") or
                    self.user_profile.location.get("default_lng") or
                    self.user_profile.location.get("lng"))
-
             if lat and lng:
+                location_source = "profile"
+                self.logger.info(f"Using profile location: ({lat}, {lng})")
+
+        # Priority 3: Auto-detect from IP
+        if not lat:
+            self.logger.info("No location in profile or query, auto-detecting from IP...")
+            result = get_location()  # Auto-detect
+            if result:
+                lat, lng, location_source = result
+                self.logger.info(f"Auto-detected location: {location_source}")
+            else:
+                return AgentResponse(
+                    success=False,
+                    message="I couldn't determine your location. Please specify a location (e.g., 'pizza in New York') or add a default location to your profile.",
+                    cost=guardrail_cost
+                )
+
+        # Execute full workflow with resolved location
+        if lat and lng:
                 self.logger.info("Executing batch workflow")
 
                 # Extract search query from user message (use intent if available)
@@ -438,7 +546,7 @@ This is a safety requirement - never recommend items with these allergens."""
 
                 if result.get("success"):
                     # Format results with LLM
-                    formatted_response = self._format_recommendations(result)
+                    formatted_response = self._format_recommendations(result, location_source)
 
                     # Save to history
                     self.message_history.add_user_message(user_message)
@@ -449,15 +557,23 @@ This is a safety requirement - never recommend items with these allergens."""
                         message=formatted_response,
                         metadata={
                             "stats": result.get("stats", {}),
-                            "restaurants_count": len(result.get("restaurants", []))
+                            "restaurants_count": len(result.get("restaurants", [])),
+                            "location_source": location_source
                         },
                         cost=guardrail_cost + 0.03  # Estimate
                     )
                 else:
                     error_msg = result.get("error", "Could not process request")
+
+                    # Add helpful suggestions to the error message
+                    suggestions = "\n\n💡 **Suggestions:**\n"
+                    suggestions += "- Try a more specific search: 'biryani near me', 'pizza restaurants', 'chinese food'\n"
+                    suggestions += "- Search by restaurant name: 'chipotle menu', 'panda express'\n"
+                    suggestions += "- Try a different location with more restaurants"
+
                     return AgentResponse(
                         success=False,
-                        message=f"I encountered an issue: {error_msg}",
+                        message=f"I encountered an issue: {error_msg}{suggestions}",
                         cost=guardrail_cost
                     )
 
@@ -595,12 +711,13 @@ Include ALL items from this menu in the menu_items argument."""
             cost=guardrail_cost + 0.02 * iterations  # Estimate
         )
 
-    def _format_recommendations(self, result: Dict[str, Any]) -> str:
+    def _format_recommendations(self, result: Dict[str, Any], location_source: Optional[str] = None) -> str:
         """
         Format batch processing results into user-friendly recommendations.
 
         Args:
             result: Result from process_meal_request
+            location_source: Description of location used (e.g., "profile", "New York, NY", "auto-detected")
 
         Returns:
             Formatted markdown text
@@ -622,6 +739,11 @@ Include ALL items from this menu in the menu_items argument."""
 
         # Build response
         lines = []
+
+        # Add location info if available
+        if location_source and location_source != "profile":
+            lines.append(f"📍 *Searching near: {location_source}*\n")
+
         lines.append(f"I found **{len(filtered_items)} items** from **{len(by_restaurant)} restaurants** that match your criteria:\n")
 
         for rest_name, items in by_restaurant.items():

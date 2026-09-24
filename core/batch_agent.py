@@ -104,8 +104,19 @@ class BatchMenuProcessor:
         Returns:
             List of successful menu fetches with items
         """
+        # Filter restaurants that have websites BEFORE processing
+        restaurants_with_websites = [
+            r for r in restaurants if r.get("website")
+        ]
+
+        if not restaurants_with_websites:
+            self.logger.warning(f"None of the {len(restaurants)} restaurants have websites - cannot fetch menus")
+            return []
+
+        self.logger.info(f"Filtered {len(restaurants_with_websites)}/{len(restaurants)} restaurants with websites")
+
         max_restaurants = max_restaurants or self.batch_size
-        to_process = restaurants[:max_restaurants]
+        to_process = restaurants_with_websites[:max_restaurants]
 
         self.logger.info(f"Batch processing {len(to_process)} restaurants with concurrency={self.concurrency}...")
 
