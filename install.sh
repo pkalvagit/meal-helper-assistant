@@ -36,9 +36,17 @@ pip install -q langchain-openai openai
 echo "Installing utilities..."
 pip install -q requests beautifulsoup4 pypdf markdownify playwright
 
-# Install CLI
+# Install data processing
+echo "Installing data processing libraries..."
+pip install -q numpy pandas
+
+# Install CLI and evaluation
 echo "Installing CLI tools..."
 pip install -q typer rich
+
+# Install evaluation dependencies
+echo "Installing evaluation dependencies..."
+pip install -q pytest pytest-asyncio
 
 echo
 echo "✅ Installation complete!"

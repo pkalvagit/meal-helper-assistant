@@ -1,0 +1,264 @@
+# Evaluation Configuration
+# Define all evaluation dimensions with their settings
+
+evaluations:
+  # 1. Latency Metrics (no LLM needed)
+  latency:
+    enabled: true
+    llm_required: false
+    description: "Measure end-to-end response latency"
+    metrics:
+      - p50  # 50th percentile
+      - p95  # 95th percentile
+      - p99  # 99th percentile
+      - mean
+      - max
+    thresholds:
+      p50_max: 5.0  # seconds
+      p95_max: 10.0
+      min_score: 3  # Not used for latency, but included for consistency
+      critical: false
+
+  # 2. Token Consumption (no LLM needed)
+  token_usage:
+    enabled: true
+    llm_required: false
+    description: "Track token usage and cost"
+    metrics:
+      - total_tokens
+      - input_tokens
+      - output_tokens
+      - estimated_cost
+    thresholds:
+      max_tokens: 50000
+      max_cost_usd: 0.10
+      min_score: 3  # Not used for token usage, but included for consistency
+      critical: false
+
+  # 3. Geo Location Accuracy (hybrid: programmatic + optional LLM)
+  geo_location:
+    enabled: true
+    llm_required: false  # Programmatic check first
+    llm_verification: true  # Optional LLM double-check
+    llm_model: "gpt-5.4-nano"
+    provider: "openai"
+    description: "Verify restaurants are in correct location"
+    thresholds:
+      max_distance_miles: 10.0
+      min_score: 4  # Must score at least 4/5
+      critical: true
+    scoring:
+      score_range: [1, 5]
+      perfect_distance: 2.0  # within 2 miles = 5
+      acceptable_distance: 5.0  # within 5 miles = 4
+
+  # 4. Ground Truth - Menu Items Exist (LLM judge)
+  ground_truth:
+    enabled: true
+    llm_required: true
+    llm_model: "gpt-5.4-mini"  # Needs reasoning
+    provider: "openai"
+    description: "Verify recommended menu items actually exist in restaurant"
+    temperature: 0.1  # Low temp for factual checking
+    max_tokens: 1000
+    scoring:
+      score_range: [1, 5]
+      criteria:
+        - "Do recommended items exist in the menu?"
+        - "Are prices accurate?"
+        - "Are descriptions reasonable for this restaurant type?"
+      weights:
+        item_exists: 0.6
+        price_accurate: 0.3
+        description_reasonable: 0.1
+    thresholds:
+      min_score: 4
+      critical: true
+
+  # 5. Dietary Safety - CRITICAL (LLM judge)
+  dietary_safety:
+    enabled: true
+    llm_required: true
+    llm_model: "gpt-5.4-mini"  # Fast and cheap, but accurate
+    provider: "openai"
+    description: "CRITICAL: Verify no allergens or restricted foods in recommendations"
+    temperature: 0.0  # Deterministic for safety
+    max_tokens: 800
+    scoring:
+      score_range: [1, 5]
+      criteria:
+        - "Are ALL user allergens completely avoided?"
+        - "Are ALL dietary restrictions respected?"
+        - "Are there any suspicious ingredients that might contain allergens?"
+      # 5 = Perfectly safe, 1 = Dangerous allergens present
+      safety_critical: true
+    thresholds:
+      min_score: 5  # MUST be perfect
+      critical: true
+      fail_on_violation: true  # Immediately fail eval if < 5
+
+  # 6. Relevance - Budget & Goal Alignment (LLM judge)
+  relevance:
+    enabled: true
+    llm_required: true
+    llm_model: "gpt-5.4-mini"  # Good reasoning
+    provider: "openai"
+    description: "Evaluate if recommendations meet user goals and budget"
+    temperature: 0.2
+    max_tokens: 1200
+    scoring:
+      score_range: [1, 5]
+      criteria:
+        - "Are recommendations within user budget?"
+        - "Do they match the query intent (cuisine, meal type, etc.)?"
+        - "Do they help user achieve their nutrition/dietary goals?"
+        - "Is the variety/selection appropriate?"
+      weights:
+        budget_adherence: 0.3
+        query_intent_match: 0.3
+        goal_alignment: 0.3
+        variety: 0.1
+    thresholds:
+      min_score: 3
+      critical: false
+
+# Judge Prompts
+judge_prompts:
+  geo_location: |
+    You are evaluating location accuracy for a restaurant recommendation system.
+
+    USER QUERY: "{query}"
+    EXPECTED LOCATION: {expected_location}
+    RECOMMENDED RESTAURANTS: {restaurants}
+
+    For each restaurant, verify:
+    1. Is it in the correct geographic area?
+    2. Is the distance reasonable for the query?
+
+    Respond with JSON:
+    {{
+      "score": 1-5,
+      "reasoning": "brief explanation",
+      "issues": ["list any location problems"],
+      "distances": {{"restaurant_name": distance_in_miles}}
+    }}
+
+  ground_truth: |
+    You are verifying menu item authenticity for a restaurant recommendation.
+
+    RESTAURANT: {restaurant_name}
+    RESTAURANT TYPE: {restaurant_type}
+    ACTUAL MENU (from scraping): {actual_menu}
+    RECOMMENDED ITEMS: {recommended_items}
+
+    Verify each recommended item:
+    1. Does it exist in the actual menu?
+    2. Is the price accurate (within $1)?
+    3. Is the description reasonable for this restaurant?
+
+    Score (1-5):
+    5 = All items verified, perfect match
+    4 = Minor discrepancies (small price diff, slight name variation)
+    3 = Some items questionable but plausible
+    2 = Several items don't match or seem wrong
+    1 = Most items don't exist or are completely wrong
+
+    Respond with JSON:
+    {{
+      "score": 1-5,
+      "reasoning": "detailed explanation",
+      "item_verification": [
+        {{"item": "name", "exists": true/false, "price_match": true/false, "confidence": 0.0-1.0}}
+      ],
+      "issues": ["list problems found"]
+    }}
+
+  dietary_safety: |
+    CRITICAL SAFETY EVALUATION
+
+    USER ALLERGIES: {allergies}
+    USER RESTRICTIONS: {dietary_restrictions}
+    RECOMMENDED ITEMS: {recommended_items}
+
+    For EACH item, check:
+    1. Does it contain ANY user allergens? (check ingredients, descriptions)
+    2. Does it violate ANY dietary restrictions?
+    3. Are there suspicious ingredients that might contain hidden allergens?
+
+    IMPORTANT: Be VERY conservative. If unsure, flag it as unsafe.
+    Better to reject a safe item than allow an unsafe one.
+
+    Score (1-5):
+    5 = Perfectly safe, no concerns whatsoever
+    4 = Safe, but one minor uncertainty (clearly noted)
+    3 = Some concerns, needs verification
+    2 = Likely unsafe, allergen probably present
+    1 = UNSAFE - allergen definitely present
+
+    Respond with JSON:
+    {{
+      "score": 1-5,
+      "safe": true/false,
+      "reasoning": "explain safety assessment",
+      "allergen_matches": [
+        {{"item": "name", "allergen": "found", "confidence": 0.0-1.0, "source": "ingredient/description"}}
+      ],
+      "restriction_violations": [
+        {{"item": "name", "restriction": "violated", "confidence": 0.0-1.0}}
+      ],
+      "concerns": ["list any uncertainties"]
+    }}
+
+  relevance: |
+    You are evaluating recommendation quality for a meal helper system.
+
+    USER QUERY: "{query}"
+    USER PROFILE:
+      - Budget: ${max_budget} per meal
+      - Allergies: {allergies}
+      - Restrictions: {dietary_restrictions}
+      - Preferences: {preferences}
+
+    RECOMMENDATIONS: {recommendations}
+
+    Evaluate:
+    1. Budget: Are items within ${max_budget}?
+    2. Intent: Do they match what user asked for?
+    3. Goals: Do they align with dietary preferences/nutrition targets?
+    4. Variety: Is there good selection/diversity?
+
+    Score (1-5):
+    5 = Perfect match for user needs
+    4 = Good match, minor improvements possible
+    3 = Acceptable, but could be better targeted
+    2 = Somewhat relevant but misses key requirements
+    1 = Poor match, doesn't meet user needs
+
+    Respond with JSON:
+    {{
+      "score": 1-5,
+      "reasoning": "overall assessment",
+      "budget_score": 1-5,
+      "intent_score": 1-5,
+      "goal_score": 1-5,
+      "variety_score": 1-5,
+      "strengths": ["what worked well"],
+      "weaknesses": ["what could improve"]
+    }}
+
+# Parallel Execution Settings
+execution:
+  parallel: true
+  max_concurrent_llm_calls: 5  # Limit concurrent API calls
+  timeout_per_eval: 30  # seconds
+  retry_on_failure: true
+  max_retries: 2
+
+# Output Settings
+output:
+  format: "json"
+  save_to_file: true
+  results_dir: "evals/results"
+  include_timestamp: true
+  pretty_print: true
+  save_individual_eval_results: true
