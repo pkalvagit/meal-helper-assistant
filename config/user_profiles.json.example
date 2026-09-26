@@ -1,0 +1,96 @@
+{
+  "example_user": {
+    "name": "User1",
+    "allergies": ["peanuts", "shellfish"],
+    "dietary_restrictions": ["no_beef", "no_pork"],
+    "preferences": {
+      "high_protein": true,
+      "low_carb": false,
+      "vegetarian_options": true
+    },
+    "budget": {
+      "max_per_meal": 15.00,
+      "currency": "USD"
+    },
+    "location": {
+      "default_lat": 38.9586,
+      "default_lng": -77.3570,
+      "default_radius": 5000
+    },
+    "nutrition_targets": {
+      "min_protein_g": 25,
+      "max_calories": 800,
+      "max_sodium_mg": 2000
+    }
+  },
+  "vegan_user": {
+    "name": "VeganUser",
+    "allergies": [],
+    "dietary_restrictions": ["vegan"],
+    "preferences": {
+      "organic": true,
+      "gluten_free": false
+    },
+    "budget": {
+      "max_per_meal": 20.00,
+      "currency": "USD"
+    },
+    "location": {
+      "default_lat": 40.7589,
+      "default_lng": -73.9851,
+      "default_radius": 8000
+    }
+  },
+  "gluten_free_user": {
+    "name": "GFUser",
+    "allergies": ["gluten"],
+    "dietary_restrictions": ["gluten_free"],
+    "preferences": {
+      "dairy_free": false
+    },
+    "budget": {
+      "max_per_meal": 18.00,
+      "currency": "USD"
+    },
+    "location": {
+      "default_lat": 37.7749,
+      "default_lng": -122.4194,
+      "default_radius": 5000
+    }
+  },
+  "keto_user": {
+    "name": "KetoUser",
+    "allergies": [],
+    "dietary_restrictions": ["keto", "low_carb"],
+    "preferences": {
+      "high_protein": true,
+      "high_fat": true
+    },
+    "budget": {
+      "max_per_meal": 25.00,
+      "currency": "USD"
+    },
+    "nutrition_targets": {
+      "max_carbs_g": 20,
+      "min_protein_g": 30,
+      "min_fat_g": 40
+    }
+  },
+  "budget_conscious": {
+    "name": "BudgetUser",
+    "allergies": [],
+    "dietary_restrictions": [],
+    "preferences": {
+      "value_for_money": true
+    },
+    "budget": {
+      "max_per_meal": 10.00,
+      "currency": "USD"
+    },
+    "location": {
+      "default_lat": 34.0522,
+      "default_lng": -118.2437,
+      "default_radius": 10000
+    }
+  }
+}

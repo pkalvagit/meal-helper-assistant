@@ -1,0 +1,70 @@
+# LLM Configuration
+# Switch between Claude and OpenAI by changing 'provider'
+
+# Primary LLM (for main agent)
+primary:
+  provider: "openai"  # Options: "claude" or "openai"
+
+  claude:
+    model: "claude-opus-5"
+    max_tokens: 16000
+    temperature: 0.7
+    thinking:
+      type: "adaptive"
+      display: "summarized"
+
+  openai:
+    model: "gpt-5.4-mini"  # Options: gpt-4o, gpt-4-turbo, gpt-4, gpt-5.4-mini, gpt-5.4-nano
+    max_tokens: 4096
+    temperature: 0.7
+
+# Guardrail LLM (for intent classification - use cheaper model)
+guardrail:
+  provider: "openai"  # Options: "claude" or "openai" - fully flexible!
+
+  claude:
+    model: "claude-haiku-4-5"
+    max_tokens: 256
+    temperature: 0.0
+
+  openai:
+    model: "gpt-5.4-nano"  # Options: gpt-4o-mini, gpt-5.4-mini, gpt-5.4-nano
+    max_tokens: 256
+    temperature: 0.0
+
+# Cost tracking (per 1M tokens in USD)
+cost_per_1m_tokens:
+  # Claude
+  claude-opus-5:
+    input: 5.00
+    output: 25.00
+  claude-sonnet-5:
+    input: 2.00
+    output: 10.00
+  claude-haiku-4-5:
+    input: 1.00
+    output: 5.00
+
+  # OpenAI
+  gpt-4o:
+    input: 2.50
+    output: 10.00
+  gpt-4o-mini:
+    input: 0.15
+    output: 0.60
+  gpt-4-turbo:
+    input: 10.00
+    output: 30.00
+  gpt-5.4-mini:
+    input: 0.10
+    output: 0.40
+  gpt-5.4-nano:
+    input: 0.05
+    output: 0.20
+
+# General settings
+settings:
+  max_retries: 3
+  timeout: 120
+  verbose: true
+  enable_tracing: false  # LangSmith tracing

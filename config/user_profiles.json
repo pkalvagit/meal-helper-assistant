@@ -1,0 +1,39 @@
+{
+  "example_user": {
+    "name": "User1",
+    "allergies": ["peanuts", "shellfish"],
+    "dietary_restrictions": ["no_beef", "no_pork"],
+    "preferences": {
+      "high_protein": true,
+      "low_carb": false,
+      "vegetarian_options": true
+    },
+    "budget": {
+      "max_per_meal": 15.00,
+      "currency": "USD"
+    },
+    "location": {
+      "default_lat": 38.9586,
+      "default_lng": -77.3570,
+      "default_radius": 5000
+    },
+    "nutrition_targets": {
+      "min_protein_g": 25,
+      "max_calories": 800,
+      "max_sodium_mg": 2000
+    }
+  },
+  "vegan_user": {
+    "name": "VeganUser",
+    "allergies": [],
+    "dietary_restrictions": ["vegan"],
+    "preferences": {
+      "organic": true,
+      "gluten_free": false
+    },
+    "budget": {
+      "max_per_meal": 20.00,
+      "currency": "USD"
+    }
+  }
+}

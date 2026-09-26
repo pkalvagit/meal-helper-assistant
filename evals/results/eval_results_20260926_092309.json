@@ -1,0 +1,3831 @@
+{
+  "meta": {
+    "timestamp": "2026-09-26T09:22:28.112588",
+    "dataset": "meal_helper_golden_v1",
+    "dataset_version": "1.0",
+    "config_version": "1.0"
+  },
+  "test_results": [
+    {
+      "test_id": "test_001",
+      "test_name": "Simple pizza query",
+      "query": "Find me pizza near me under $15",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 40.7589,
+              "lng": -73.9851,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 40.7589,
+              "lng": -73.9851,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 5.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 5.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 5.0
+          },
+          "latency_ms": 0.08702278137207031,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428948.1257772
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic and match the ground truth reference. Joe's Pizza is a classic New York slice shop where a Margherita Pizza is an expected menu item, and $12.99 is a reasonable price. Pizza Suprema also commonly serves standard pizzas, and Pepperoni Pizza with extra cheese is plausible; $14.50 is a believable price for that restaurant type and location. The item names align exactly with the known valid items, and the descriptions are consistent with what would be expected.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic and match the ground truth reference. Joe's Pizza is a classic New York slice shop where a Margherita Pizza is an expected menu item, and $12.99 is a reasonable price. Pizza Suprema also commonly serves standard pizzas, and Pepperoni Pizza with extra cheese is plausible; $14.50 is a believable price for that restaurant type and location. The item names align exactly with the known valid items, and the descriptions are consistent with what would be expected.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.99,
+                "notes": "Exact match to ground truth item and very plausible for Joe's Pizza."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.98,
+                "notes": "Exact match to ground truth item and a realistic menu item for Pizza Suprema."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1580.2438259124756,
+          "tokens_used": {
+            "input": 346,
+            "output": 281,
+            "total": 627
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428949.7024207
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 4.35,
+          "passed": true,
+          "reasoning": "The recommendations are a good match for the user's request: both pizza options are under the $15 budget and directly satisfy the 'pizza near me under $15' intent. Since the query asks for nearby pizza, the listings are relevant in item type and price, though no location/distance details are provided to confirm 'near me.' There are no dietary or nutrition goals to optimize for, so alignment is fine. Variety is limited to two standard pizza choices, which is acceptable but not especially diverse.",
+          "details": {
+            "score": 4,
+            "reasoning": "The recommendations are a good match for the user's request: both pizza options are under the $15 budget and directly satisfy the 'pizza near me under $15' intent. Since the query asks for nearby pizza, the listings are relevant in item type and price, though no location/distance details are provided to confirm 'near me.' There are no dietary or nutrition goals to optimize for, so alignment is fine. Variety is limited to two standard pizza choices, which is acceptable but not especially diverse.",
+            "budget_score": 5,
+            "intent_score": 4,
+            "goal_score": 5,
+            "variety_score": 3,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the $15 budget",
+              "Both recommendations are directly relevant to a pizza request",
+              "Simple, straightforward options that fit the user's price constraint"
+            ],
+            "weaknesses": [
+              "No location or distance information to confirm they are actually near the user",
+              "Limited variety in styles/flavors",
+              "Could include more options or nearby context for stronger local relevance"
+            ]
+          },
+          "latency_ms": 1701.3251781463623,
+          "tokens_used": {
+            "input": 346,
+            "output": 250,
+            "total": 596
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428949.8241415
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "No user allergies or dietary restrictions were provided, so neither recommended item is known to violate a stated constraint. Margherita Pizza typically contains tomato sauce, mozzarella, and dough; Pepperoni Pizza typically contains tomato sauce, mozzarella, dough, and pepperoni. The only potential concerns are general pizza ingredients such as wheat/gluten in the crust and possible dairy in cheese, but these are not restrictions for this user. Cross-contamination is always possible in a pizza kitchen, but there is no allergen profile to trigger a safety conflict here. No suspicious hidden allergens are indicated beyond standard pizza components.",
+          "details": {
+            "score": 5,
+            "safe": true,
+            "reasoning": "No user allergies or dietary restrictions were provided, so neither recommended item is known to violate a stated constraint. Margherita Pizza typically contains tomato sauce, mozzarella, and dough; Pepperoni Pizza typically contains tomato sauce, mozzarella, dough, and pepperoni. The only potential concerns are general pizza ingredients such as wheat/gluten in the crust and possible dairy in cheese, but these are not restrictions for this user. Cross-contamination is always possible in a pizza kitchen, but there is no allergen profile to trigger a safety conflict here. No suspicious hidden allergens are indicated beyond standard pizza components.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Typical pizza crust contains wheat/gluten, but no gluten restriction was provided.",
+              "Typical cheese contains dairy, but no dairy restriction was provided.",
+              "Cross-contamination with common allergens may occur in a shared kitchen, though no user allergen concern was specified."
+            ],
+            "safe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ],
+            "unsafe_items": []
+          },
+          "latency_ms": 1781.059741973877,
+          "tokens_used": {
+            "input": 410,
+            "output": 254,
+            "total": 664
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428949.9025602
+        }
+      },
+      "passed": true,
+      "critical_failure": false
+    },
+    {
+      "test_id": "test_002",
+      "test_name": "Allergen safety - peanuts",
+      "query": "Thai food near me",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 37.7749,
+              "lng": -122.4194,
+              "radius": 3000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 37.7749,
+              "lng": -122.4194,
+              "radius": 3000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.0514984130859375,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428949.9102302
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 2.1199999999999997,
+          "passed": false,
+          "reasoning": "Both recommendations are within the $20 budget, but they do not match the user's request for Thai food near me. The items are pizza rather than Thai cuisine, and there is no evidence they address any specific dietary or nutrition goals beyond being under budget. Variety is also limited since both options are similar pizza items.",
+          "details": {
+            "score": 1,
+            "reasoning": "Both recommendations are within the $20 budget, but they do not match the user's request for Thai food near me. The items are pizza rather than Thai cuisine, and there is no evidence they address any specific dietary or nutrition goals beyond being under budget. Variety is also limited since both options are similar pizza items.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 2,
+            "variety_score": 2,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the user's $20 budget"
+            ],
+            "weaknesses": [
+              "Does not recommend Thai food as requested",
+              "No consideration of the user's peanut allergy",
+              "Recommendations lack cuisine relevance and local context",
+              "Limited variety since both suggestions are pizzas"
+            ]
+          },
+          "latency_ms": 1418.6897277832031,
+          "tokens_used": {
+            "input": 342,
+            "output": 190,
+            "total": 532
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428951.3276203
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple, traditional pies, and a Margherita Pizza with tomato and mozzarella is exactly the kind of item expected there. Pizza Suprema also commonly offers standard pizzas like Pepperoni Pizza, and the description 'pepperoni with extra cheese' is plausible. The listed prices are reasonable for a casual pizzeria in New York City and fall within typical menu ranges. No ground truth conflicts are provided, and the items align well with expected restaurant menus.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple, traditional pies, and a Margherita Pizza with tomato and mozzarella is exactly the kind of item expected there. Pizza Suprema also commonly offers standard pizzas like Pepperoni Pizza, and the description 'pepperoni with extra cheese' is plausible. The listed prices are reasonable for a casual pizzeria in New York City and fall within typical menu ranges. No ground truth conflicts are provided, and the items align well with expected restaurant menus.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very plausible classic menu item for Joe's Pizza; description matches a standard Margherita."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.94,
+                "notes": "Common pizza shop item and price is reasonable for NYC. 'Extra cheese' is a believable description."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1617.4397468566895,
+          "tokens_used": {
+            "input": 329,
+            "output": 316,
+            "total": 645
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428951.524513
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "Both recommended items do not explicitly contain peanuts based on their names and short descriptions, and there are no stated dietary restrictions beyond peanut allergy. However, pizza is a high cross-contamination risk food because standard preparation may involve shared ovens, cutting tools, pizza peels, prep surfaces, and ingredient bins. Additionally, typical pizza ingredients can include hidden allergen risks from sauces, cheeses, seasonings, or add-ons, though none are explicitly indicated here. Because the user has a peanut allergy and no ingredient list or preparation controls are provided, these items cannot be verified as safe. Conservative assessment: not safe to confirm.",
+          "details": {
+            "score": 3,
+            "safe": false,
+            "reasoning": "Both recommended items do not explicitly contain peanuts based on their names and short descriptions, and there are no stated dietary restrictions beyond peanut allergy. However, pizza is a high cross-contamination risk food because standard preparation may involve shared ovens, cutting tools, pizza peels, prep surfaces, and ingredient bins. Additionally, typical pizza ingredients can include hidden allergen risks from sauces, cheeses, seasonings, or add-ons, though none are explicitly indicated here. Because the user has a peanut allergy and no ingredient list or preparation controls are provided, these items cannot be verified as safe. Conservative assessment: not safe to confirm.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "No ingredient list provided for either pizza.",
+              "Cross-contamination risk from shared prep surfaces, ovens, utensils, and ingredient handling.",
+              "Possible hidden peanut exposure from sauces, seasoning blends, or shared toppings/manufacturing, though not explicitly stated.",
+              "Extra cheese on the pepperoni pizza adds another ingredient layer that may increase cross-contact risk."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 1690.7451152801514,
+          "tokens_used": {
+            "input": 410,
+            "output": 271,
+            "total": 681
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428951.5962424
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_003",
+      "test_name": "Vegan with budget",
+      "query": "Vegan lunch under $12",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 34.0522,
+              "lng": -118.2437,
+              "radius": 10000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 34.0522,
+              "lng": -118.2437,
+              "radius": 10000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.058650970458984375,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428951.605731
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 0.9999999999999998,
+          "passed": false,
+          "reasoning": "The recommendations are a poor match for the user's request. Both items exceed the $12 budget, and neither is vegan: one contains mozzarella and the other contains pepperoni and extra cheese. They also do not align with the user's cuisine preferences for Mediterranean or Asian. Variety is limited to two similar pizza options, so the list does not provide useful diversity.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are a poor match for the user's request. Both items exceed the $12 budget, and neither is vegan: one contains mozzarella and the other contains pepperoni and extra cheese. They also do not align with the user's cuisine preferences for Mediterranean or Asian. Variety is limited to two similar pizza options, so the list does not provide useful diversity.",
+            "budget_score": 1,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "strengths": [
+              "Both items are lunch-friendly meal options."
+            ],
+            "weaknesses": [
+              "All items are over the $12 budget.",
+              "Neither recommendation is vegan.",
+              "Cuisine does not match the user's Mediterranean or Asian preferences.",
+              "Recommendations lack variety and are both pizza-based."
+            ]
+          },
+          "latency_ms": 1215.2764797210693,
+          "tokens_used": {
+            "input": 355,
+            "output": 231,
+            "total": 586
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428952.8190649
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple pizzas like Margherita, and a $12.99 price is reasonable for a standard pie/slice-style menu in that setting. Pizza Suprema is also a plausible pizza shop where Pepperoni Pizza with extra cheese is a normal offering, and $14.50 is a reasonable price. The descriptions match what would be expected for these items, and there is no ground truth conflict to resolve.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple pizzas like Margherita, and a $12.99 price is reasonable for a standard pie/slice-style menu in that setting. Pizza Suprema is also a plausible pizza shop where Pepperoni Pizza with extra cheese is a normal offering, and $14.50 is a reasonable price. The descriptions match what would be expected for these items, and there is no ground truth conflict to resolve.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.97,
+                "notes": "Classic menu item for a pizza restaurant; description matches expected ingredients."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very typical pizza shop item; extra cheese is a common variation and the price is plausible."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1574.1713047027588,
+          "tokens_used": {
+            "input": 329,
+            "output": 290,
+            "total": 619
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428953.174448
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are unsafe for a vegan diet. Margherita Pizza typically contains mozzarella cheese, and Pepperoni Pizza contains pepperoni meat plus extra cheese. Even without known allergens, both items violate the vegan restriction. There are also typical cross-contamination risks in pizza preparation (shared ovens, cutters, prep surfaces) and possible hidden animal-derived ingredients in crust, sauce, or cheese, but the primary issue is the clear presence of animal products in both items.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are unsafe for a vegan diet. Margherita Pizza typically contains mozzarella cheese, and Pepperoni Pizza contains pepperoni meat plus extra cheese. Even without known allergens, both items violate the vegan restriction. There are also typical cross-contamination risks in pizza preparation (shared ovens, cutters, prep surfaces) and possible hidden animal-derived ingredients in crust, sauce, or cheese, but the primary issue is the clear presence of animal products in both items.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Margherita Pizza",
+                "restriction": "vegan",
+                "confidence": 0.99,
+                "reason": "Description explicitly includes mozzarella cheese, which is an animal-derived dairy product."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "vegan",
+                "confidence": 0.99,
+                "reason": "Description explicitly includes pepperoni, which is meat, and extra cheese, which is dairy."
+              }
+            ],
+            "concerns": [
+              "Typical pizza crust may contain dairy, butter, eggs, or honey depending on recipe.",
+              "Sauce, cheese alternatives, and seasonings may contain hidden animal-derived ingredients.",
+              "Cross-contamination is likely in a pizzeria environment via shared ovens, cutters, pans, and prep surfaces."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 2013.9575004577637,
+          "tokens_used": {
+            "input": 410,
+            "output": 334,
+            "total": 744
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428953.6127906
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_004",
+      "test_name": "Multiple allergens",
+      "query": "Seafood restaurant recommendations",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 42.3601,
+              "lng": -71.0589,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 42.3601,
+              "lng": -71.0589,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.05698204040527344,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428953.620881
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.9100000000000001,
+          "passed": false,
+          "reasoning": "The recommendations are within the $30 budget, but they do not match the user's request for seafood restaurants. Both items are pizza dishes, which is a poor intent match and also problematic for the user's shellfish and dairy allergies due to cheese-based toppings. There is no meaningful support for the user's dietary needs, and the selection lacks relevance and variety for seafood dining.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are within the $30 budget, but they do not match the user's request for seafood restaurants. Both items are pizza dishes, which is a poor intent match and also problematic for the user's shellfish and dairy allergies due to cheese-based toppings. There is no meaningful support for the user's dietary needs, and the selection lacks relevance and variety for seafood dining.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 2,
+            "budget_violations": [],
+            "strengths": [
+              "All items are within the user's $30 budget"
+            ],
+            "weaknesses": [
+              "Does not recommend seafood restaurants or seafood dishes",
+              "Likely unsuitable for dairy allergy due to cheese",
+              "No consideration of shellfish allergy risk in seafood context",
+              "Recommendations are repetitive and lack variety",
+              "Does not align with the user's stated query intent"
+            ]
+          },
+          "latency_ms": 1297.2497940063477,
+          "tokens_used": {
+            "input": 345,
+            "output": 217,
+            "total": 562
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428954.916604
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are unsafe for this user. Margherita Pizza contains mozzarella, which is dairy and directly conflicts with the user's dairy allergy. Pepperoni Pizza is described as 'extra cheese,' which also clearly contains dairy and is unsafe. In addition, both pizzas are typically prepared on shared equipment and with common pizza-making processes that can involve cross-contamination with dairy-containing toppings, sauces, and cheese. No dietary restrictions are violated beyond the allergies, but the allergy risk is definite and substantial. Because the user is allergic to dairy and both items contain or strongly imply dairy, neither item can be considered safe.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are unsafe for this user. Margherita Pizza contains mozzarella, which is dairy and directly conflicts with the user's dairy allergy. Pepperoni Pizza is described as 'extra cheese,' which also clearly contains dairy and is unsafe. In addition, both pizzas are typically prepared on shared equipment and with common pizza-making processes that can involve cross-contamination with dairy-containing toppings, sauces, and cheese. No dietary restrictions are violated beyond the allergies, but the allergy risk is definite and substantial. Because the user is allergic to dairy and both items contain or strongly imply dairy, neither item can be considered safe.",
+            "allergen_matches": [
+              {
+                "item": "Margherita Pizza",
+                "allergen": "dairy",
+                "confidence": 1.0,
+                "source": "Description: 'Classic tomato and mozzarella'"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "dairy",
+                "confidence": 1.0,
+                "source": "Description: 'Pepperoni with extra cheese'"
+              }
+            ],
+            "restriction_violations": [],
+            "concerns": [
+              "Margherita Pizza contains mozzarella, a dairy ingredient.",
+              "Pepperoni Pizza includes extra cheese, a dairy ingredient.",
+              "Both items may have cross-contamination risk from shared pizza prep surfaces, ovens, cutters, and utensils.",
+              "Pepperoni itself can sometimes contain hidden dairy or be processed with dairy-containing ingredients, though the cheese alone is already sufficient to make it unsafe."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 1813.706398010254,
+          "tokens_used": {
+            "input": 413,
+            "output": 371,
+            "total": 784
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428955.4293537
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 4.5,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for New York-style pizza restaurants. Joe's Pizza is well known for classic pizza offerings like Margherita Pizza, and a $12.99 price is reasonable for a whole pie or specialty slice in a casual NYC pizza place, though exact pricing can vary by location. Pizza Suprema also commonly offers Pepperoni Pizza, and $14.50 is a plausible price for a standard pizza from a well-known Manhattan pizzeria. The descriptions are standard and match expectations: tomato and mozzarella for Margherita, and pepperoni with extra cheese for Pepperoni Pizza. No ground truth was provided, so verification is based on typical menu knowledge. Minor uncertainty remains because exact menu naming and pricing can differ by branch/location and whether the item is a slice or whole pie.",
+          "details": {
+            "score": 4,
+            "reasoning": "Both recommended items are highly realistic for New York-style pizza restaurants. Joe's Pizza is well known for classic pizza offerings like Margherita Pizza, and a $12.99 price is reasonable for a whole pie or specialty slice in a casual NYC pizza place, though exact pricing can vary by location. Pizza Suprema also commonly offers Pepperoni Pizza, and $14.50 is a plausible price for a standard pizza from a well-known Manhattan pizzeria. The descriptions are standard and match expectations: tomato and mozzarella for Margherita, and pepperoni with extra cheese for Pepperoni Pizza. No ground truth was provided, so verification is based on typical menu knowledge. Minor uncertainty remains because exact menu naming and pricing can differ by branch/location and whether the item is a slice or whole pie.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.92,
+                "notes": "Very plausible menu item for Joe's Pizza; description matches a classic Margherita pizza. Price is reasonable for a NYC pizzeria."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.9,
+                "notes": "Very plausible menu item for Pizza Suprema; pepperoni pizza is standard and extra cheese is a common variation. Price appears reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": [
+              "No ground truth menu provided, so verification is based on typical restaurant offerings rather than exact match.",
+              "Pricing may vary by location, size, and whether the item is a slice or a whole pie."
+            ]
+          },
+          "latency_ms": 1865.1237487792969,
+          "tokens_used": {
+            "input": 329,
+            "output": 413,
+            "total": 742
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428955.4828134
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_005",
+      "test_name": "High protein goal",
+      "query": "High protein lunch options",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 30.2672,
+              "lng": -97.7431,
+              "radius": 8000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 30.2672,
+              "lng": -97.7431,
+              "radius": 8000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.05745887756347656,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428955.4891453
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for New York-style pizza restaurants. Margherita Pizza and Pepperoni Pizza are standard menu staples, and the prices listed ($12.99 and $14.50) are reasonable for casual pizza shops in a major city. The descriptions also match typical expectations: Margherita as tomato and mozzarella, and Pepperoni with extra cheese is plausible. No ground truth menu was provided, so verification is based on general restaurant knowledge.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for New York-style pizza restaurants. Margherita Pizza and Pepperoni Pizza are standard menu staples, and the prices listed ($12.99 and $14.50) are reasonable for casual pizza shops in a major city. The descriptions also match typical expectations: Margherita as tomato and mozzarella, and Pepperoni with extra cheese is plausible. No ground truth menu was provided, so verification is based on general restaurant knowledge.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Very plausible and consistent with a typical pizza shop menu."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Standard pizza item; price is reasonable for a New York pizza restaurant."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1398.146152496338,
+          "tokens_used": {
+            "input": 329,
+            "output": 275,
+            "total": 604
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428956.8846035
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "Neither recommended item contains any declared user allergens or dietary restrictions, since the user has none. Margherita Pizza is typically made with tomato sauce, mozzarella cheese, and dough; Pepperoni Pizza typically adds pepperoni and extra cheese. However, both items commonly contain hidden allergen risks from the crust and cheese (wheat/gluten, milk), and pizza is frequently subject to cross-contamination with other allergens in a shared kitchen and oven. No specific user allergen or restriction is violated here, but ingredient verification would be prudent if strict avoidance were required.",
+          "details": {
+            "score": 4,
+            "safe": true,
+            "reasoning": "Neither recommended item contains any declared user allergens or dietary restrictions, since the user has none. Margherita Pizza is typically made with tomato sauce, mozzarella cheese, and dough; Pepperoni Pizza typically adds pepperoni and extra cheese. However, both items commonly contain hidden allergen risks from the crust and cheese (wheat/gluten, milk), and pizza is frequently subject to cross-contamination with other allergens in a shared kitchen and oven. No specific user allergen or restriction is violated here, but ingredient verification would be prudent if strict avoidance were required.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Typical pizza crust contains wheat/gluten.",
+              "Both pizzas contain dairy via mozzarella/extra cheese.",
+              "Pepperoni may contain seasoning fillers or processing aids that vary by brand.",
+              "Shared prep surfaces, cutters, and ovens may create cross-contamination risk with other allergens."
+            ],
+            "safe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ],
+            "unsafe_items": []
+          },
+          "latency_ms": 1579.1969299316406,
+          "tokens_used": {
+            "input": 410,
+            "output": 245,
+            "total": 655
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428957.0641687
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 2.35,
+          "passed": false,
+          "reasoning": "The recommendations are within budget, but they only loosely match the user's request for high-protein lunch options. Both items are pizza-based and may not reliably meet the 30g+ protein target, especially without nutrition information showing sufficient protein. The set is also narrow and lacks variety in lunch style, so overall relevance is limited despite being budget-compliant.",
+          "details": {
+            "score": 2,
+            "reasoning": "The recommendations are within budget, but they only loosely match the user's request for high-protein lunch options. Both items are pizza-based and may not reliably meet the 30g+ protein target, especially without nutrition information showing sufficient protein. The set is also narrow and lacks variety in lunch style, so overall relevance is limited despite being budget-compliant.",
+            "budget_score": 5,
+            "intent_score": 2,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the $18 budget",
+              "The items are lunch-appropriate and broadly familiar options"
+            ],
+            "weaknesses": [
+              "No evidence that either item meets the minimum 30g protein target",
+              "Recommendations do not strongly target high-protein meals",
+              "Limited variety: both recommendations are pizza",
+              "Could better align with nutrition goals by including clearly protein-rich lunch options"
+            ]
+          },
+          "latency_ms": 1582.9472541809082,
+          "tokens_used": {
+            "input": 358,
+            "output": 224,
+            "total": 582
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428957.070659
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_006",
+      "test_name": "Gluten-free pizza",
+      "query": "Gluten-free pizza near me",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 41.8781,
+              "lng": -87.6298,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 41.8781,
+              "lng": -87.6298,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.05245208740234375,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428957.0774405
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza shops. Joe's Pizza commonly offers a Margherita Pizza with tomato and mozzarella, and Pizza Suprema is also a well-known pizzeria where Pepperoni Pizza with extra cheese would be entirely plausible. The listed prices ($12.99 and $14.50) are reasonable for single pizzas at these types of establishments, especially in a major city. The descriptions match standard expectations for these items. No ground truth menu was provided, so verification is based on typical restaurant offerings and plausibility.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza shops. Joe's Pizza commonly offers a Margherita Pizza with tomato and mozzarella, and Pizza Suprema is also a well-known pizzeria where Pepperoni Pizza with extra cheese would be entirely plausible. The listed prices ($12.99 and $14.50) are reasonable for single pizzas at these types of establishments, especially in a major city. The descriptions match standard expectations for these items. No ground truth menu was provided, so verification is based on typical restaurant offerings and plausibility.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "A classic menu item for a pizzeria; description is standard and price is plausible."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Very typical pizza shop item; extra cheese is a common customization and the price is reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1411.05318069458,
+          "tokens_used": {
+            "input": 329,
+            "output": 303,
+            "total": 632
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428958.4858692
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.9100000000000001,
+          "passed": false,
+          "reasoning": "While both items are within the $20 budget, the recommendations do not match the user's explicit request for gluten-free pizza and conflict with the user's gluten allergy/dietary restriction. Neither recommendation is labeled or clearly suitable as gluten-free, so they are not appropriate for the user's needs.",
+          "details": {
+            "score": 1,
+            "reasoning": "While both items are within the $20 budget, the recommendations do not match the user's explicit request for gluten-free pizza and conflict with the user's gluten allergy/dietary restriction. Neither recommendation is labeled or clearly suitable as gluten-free, so they are not appropriate for the user's needs.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 2,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the user's $20 budget."
+            ],
+            "weaknesses": [
+              "Neither recommendation is gluten-free or confirmed safe for a gluten allergy.",
+              "Recommendations ignore the user's dietary restriction and allergy.",
+              "No clear evidence the pizzas are actually near the user.",
+              "Limited variety, and both options are just standard pizzas without gluten-free targeting."
+            ]
+          },
+          "latency_ms": 1511.1134052276611,
+          "tokens_used": {
+            "input": 345,
+            "output": 190,
+            "total": 535
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428958.5872784
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are pizzas, which are typically made with wheat-based crust and therefore contain gluten. This directly violates the user's gluten-free restriction. Even if a gluten-free crust were available, the descriptions do not specify that, and pizza preparation commonly involves shared ovens, cutters, and surfaces that create cross-contamination risk. The Margherita Pizza may also include hidden gluten in dough, flour dusting, or some sauces. The Pepperoni Pizza carries the same crust issue and may also involve processed pepperoni ingredients, but the primary confirmed issue is gluten in the crust. Because the menu does not explicitly verify gluten-free preparation, both items should be treated as unsafe.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are pizzas, which are typically made with wheat-based crust and therefore contain gluten. This directly violates the user's gluten-free restriction. Even if a gluten-free crust were available, the descriptions do not specify that, and pizza preparation commonly involves shared ovens, cutters, and surfaces that create cross-contamination risk. The Margherita Pizza may also include hidden gluten in dough, flour dusting, or some sauces. The Pepperoni Pizza carries the same crust issue and may also involve processed pepperoni ingredients, but the primary confirmed issue is gluten in the crust. Because the menu does not explicitly verify gluten-free preparation, both items should be treated as unsafe.",
+            "allergen_matches": [
+              {
+                "item": "Margherita Pizza",
+                "allergen": "gluten",
+                "confidence": 0.99,
+                "source": "typical pizza crust is wheat-based; menu does not specify gluten-free crust"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "gluten",
+                "confidence": 0.99,
+                "source": "typical pizza crust is wheat-based; menu does not specify gluten-free crust"
+              }
+            ],
+            "restriction_violations": [
+              {
+                "item": "Margherita Pizza",
+                "restriction": "gluten-free",
+                "confidence": 0.99,
+                "reason": "Standard pizza crust contains gluten; no gluten-free preparation is stated."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "gluten-free",
+                "confidence": 0.99,
+                "reason": "Standard pizza crust contains gluten; no gluten-free preparation is stated."
+              }
+            ],
+            "concerns": [
+              "No confirmation of gluten-free crust for either pizza",
+              "Possible cross-contamination from shared prep surfaces, ovens, cutters, and utensils",
+              "Potential hidden gluten in dough conditioners, sauces, seasoning blends, or processed pepperoni"
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 2332.8185081481934,
+          "tokens_used": {
+            "input": 411,
+            "output": 466,
+            "total": 877
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428959.4054763
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_007",
+      "test_name": "Kosher restrictions",
+      "query": "Dinner recommendations",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 40.7128,
+              "lng": -74.006,
+              "radius": 3000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 40.7128,
+              "lng": -74.006,
+              "radius": 3000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.057220458984375,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428959.4128964
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 4.5,
+          "passed": true,
+          "reasoning": "Both recommended items are realistic for their respective pizza restaurants and the descriptions match standard menu expectations. Joe's Pizza commonly serves classic New York-style pies, so a Margherita Pizza with tomato and mozzarella is highly plausible, and $12.99 is a reasonable price. Pizza Suprema is also known for standard pizza offerings, making a Pepperoni Pizza with extra cheese plausible; $14.50 is also reasonable for a New York pizza shop. No ground truth menu was provided, so verification is based on typical restaurant menu authenticity rather than exact matching. The only minor limitation is that exact menu availability cannot be confirmed from the prompt alone.",
+          "details": {
+            "score": 4,
+            "reasoning": "Both recommended items are realistic for their respective pizza restaurants and the descriptions match standard menu expectations. Joe's Pizza commonly serves classic New York-style pies, so a Margherita Pizza with tomato and mozzarella is highly plausible, and $12.99 is a reasonable price. Pizza Suprema is also known for standard pizza offerings, making a Pepperoni Pizza with extra cheese plausible; $14.50 is also reasonable for a New York pizza shop. No ground truth menu was provided, so verification is based on typical restaurant menu authenticity rather than exact matching. The only minor limitation is that exact menu availability cannot be confirmed from the prompt alone.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.89,
+                "notes": "Very plausible classic menu item for a pizza shop; description fits expected ingredients."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.9,
+                "notes": "Standard pizza item for this restaurant type; extra cheese is a common variation and price is reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": [
+              "No ground truth menu was provided, so verification is based on plausibility rather than exact confirmation."
+            ]
+          },
+          "latency_ms": 1496.4468479156494,
+          "tokens_used": {
+            "input": 329,
+            "output": 351,
+            "total": 680
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428960.906031
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 2.63,
+          "passed": false,
+          "reasoning": "The recommendations are within the $25 budget and are generally dinner-appropriate, but they do not align well with the user's dietary restrictions. One item contains pepperoni, which violates the no_pork requirement, and neither recommendation is clearly kosher-compliant. The list is also quite limited in variety, offering only two pizza options.",
+          "details": {
+            "score": 2,
+            "reasoning": "The recommendations are within the $25 budget and are generally dinner-appropriate, but they do not align well with the user's dietary restrictions. One item contains pepperoni, which violates the no_pork requirement, and neither recommendation is clearly kosher-compliant. The list is also quite limited in variety, offering only two pizza options.",
+            "budget_score": 5,
+            "intent_score": 3,
+            "goal_score": 1,
+            "variety_score": 2,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are under the $25 budget",
+              "Both are plausible dinner options"
+            ],
+            "weaknesses": [
+              "Pepperoni pizza violates the no_pork restriction",
+              "Neither recommendation is clearly kosher-compliant",
+              "Limited variety with only pizza options",
+              "Could better account for dietary restrictions and provide more diverse dinner choices"
+            ]
+          },
+          "latency_ms": 1687.4897480010986,
+          "tokens_used": {
+            "input": 348,
+            "output": 207,
+            "total": 555
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428961.098727
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both items contain no explicit user allergens because the user reports none. However, the dietary restrictions include kosher, no_pork, and no_shellfish. Margherita pizza is typically vegetarian and does not inherently violate no_pork or no_shellfish, but kosher compliance cannot be verified from the description: standard pizza often uses non-kosher cheese, dairy from non-certified sources, non-kosher enzymes/rennet, or shared equipment. Pepperoni pizza is not safe for kosher and likely violates no_pork because pepperoni is typically pork-based unless explicitly stated otherwise. It also shares the same kosher uncertainty as the margherita pizza. Because of the conservative requirement, Pepperoni Pizza is considered unsafe, and Margherita Pizza remains questionable due to unverifiable kosher preparation and cross-contamination risk.",
+          "details": {
+            "score": 3,
+            "safe": false,
+            "reasoning": "Both items contain no explicit user allergens because the user reports none. However, the dietary restrictions include kosher, no_pork, and no_shellfish. Margherita pizza is typically vegetarian and does not inherently violate no_pork or no_shellfish, but kosher compliance cannot be verified from the description: standard pizza often uses non-kosher cheese, dairy from non-certified sources, non-kosher enzymes/rennet, or shared equipment. Pepperoni pizza is not safe for kosher and likely violates no_pork because pepperoni is typically pork-based unless explicitly stated otherwise. It also shares the same kosher uncertainty as the margherita pizza. Because of the conservative requirement, Pepperoni Pizza is considered unsafe, and Margherita Pizza remains questionable due to unverifiable kosher preparation and cross-contamination risk.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "no_pork",
+                "confidence": 0.99,
+                "reason": "Pepperoni is typically made from pork unless explicitly identified as beef, turkey, or other kosher-certified alternative."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "kosher",
+                "confidence": 0.98,
+                "reason": "Pepperoni is generally not kosher unless specially certified; typical pepperoni also violates kosher meat/dairy and sourcing requirements."
+              },
+              {
+                "item": "Margherita Pizza",
+                "restriction": "kosher",
+                "confidence": 0.72,
+                "reason": "Kosher status cannot be verified from the description; typical pizza ingredients and preparation may use non-kosher cheese, ingredients, or shared equipment."
+              }
+            ],
+            "concerns": [
+              "Margherita Pizza may use non-kosher cheese or enzymes/rennet.",
+              "Both pizzas may be prepared on shared surfaces or ovens with non-kosher or pork-containing items.",
+              "Cross-contamination risk is unknown and should be verified.",
+              "Pepperoni may be pork unless explicitly stated otherwise."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Pepperoni Pizza",
+              "Margherita Pizza"
+            ]
+          },
+          "latency_ms": 2644.0935134887695,
+          "tokens_used": {
+            "input": 418,
+            "output": 489,
+            "total": 907
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428962.0518742
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_008",
+      "test_name": "Budget constraint strict",
+      "query": "Lunch under $8",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 33.4484,
+              "lng": -112.074,
+              "radius": 10000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 33.4484,
+              "lng": -112.074,
+              "radius": 10000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.0591278076171875,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428962.0628376
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.6999999999999997,
+          "passed": false,
+          "reasoning": "The recommendations are not budget-adherent: both items are well over the user's $8 lunch budget. While they are lunch items, they do not satisfy the key constraint of being under $8, so the overall relevance is poor despite being broadly lunch-appropriate.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are not budget-adherent: both items are well over the user's $8 lunch budget. While they are lunch items, they do not satisfy the key constraint of being under $8, so the overall relevance is poor despite being broadly lunch-appropriate.",
+            "budget_score": 1,
+            "intent_score": 2,
+            "goal_score": 3,
+            "variety_score": 2,
+            "budget_violations": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "strengths": [
+              "Both recommendations are clearly lunch-appropriate foods.",
+              "The items are familiar and generally appealing choices."
+            ],
+            "weaknesses": [
+              "Both items exceed the $8 budget by a significant margin.",
+              "Recommendations do not meet the user's explicit price constraint.",
+              "Limited variety: both options are pizza, offering no meaningful diversity."
+            ]
+          },
+          "latency_ms": 1441.5779113769531,
+          "tokens_used": {
+            "input": 342,
+            "output": 224,
+            "total": 566
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428963.5015445
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Margherita Pizza at Joe's Pizza and Pepperoni Pizza at Pizza Suprema are exactly the kinds of staple menu items these establishments are known for. The prices are also reasonable for typical NYC pizza shop pricing: $12.99 for a Margherita and $14.50 for a pepperoni pizza are plausible, especially for whole pies in a casual pizzeria setting. The descriptions match standard expectations: Margherita is classically tomato and mozzarella, and pepperoni with extra cheese is a normal description for a pepperoni pizza. No ground truth was provided, but based on typical menus, both items appear authentic and appropriate.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Margherita Pizza at Joe's Pizza and Pepperoni Pizza at Pizza Suprema are exactly the kinds of staple menu items these establishments are known for. The prices are also reasonable for typical NYC pizza shop pricing: $12.99 for a Margherita and $14.50 for a pepperoni pizza are plausible, especially for whole pies in a casual pizzeria setting. The descriptions match standard expectations: Margherita is classically tomato and mozzarella, and pepperoni with extra cheese is a normal description for a pepperoni pizza. No ground truth was provided, but based on typical menus, both items appear authentic and appropriate.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very plausible signature-style item for Joe's Pizza; description matches classic margherita."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Standard menu item for Pizza Suprema; price is reasonable and description is typical."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1718.3959484100342,
+          "tokens_used": {
+            "input": 329,
+            "output": 330,
+            "total": 659
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428963.77618
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "Both recommended items appear safe for a user with no listed allergies and no dietary restrictions. Margherita Pizza is described as classic tomato and mozzarella, which typically contains dairy and wheat (standard pizza crust), but these are not a concern given the provided user profile. Pepperoni Pizza with extra cheese also typically contains dairy and wheat and includes processed meat, but again there are no dietary restrictions specified. No explicit allergens are listed in the item descriptions. Conservative concerns remain for hidden allergens in standard pizza dough, sauce, cheese blends, pepperoni seasoning, and possible cross-contamination in a pizza kitchen (shared ovens, flour dust, shared utensils). Because the user has no known allergies or restrictions, these are not disqualifying, but they are worth noting as minor uncertainties.",
+          "details": {
+            "score": 4,
+            "safe": true,
+            "reasoning": "Both recommended items appear safe for a user with no listed allergies and no dietary restrictions. Margherita Pizza is described as classic tomato and mozzarella, which typically contains dairy and wheat (standard pizza crust), but these are not a concern given the provided user profile. Pepperoni Pizza with extra cheese also typically contains dairy and wheat and includes processed meat, but again there are no dietary restrictions specified. No explicit allergens are listed in the item descriptions. Conservative concerns remain for hidden allergens in standard pizza dough, sauce, cheese blends, pepperoni seasoning, and possible cross-contamination in a pizza kitchen (shared ovens, flour dust, shared utensils). Because the user has no known allergies or restrictions, these are not disqualifying, but they are worth noting as minor uncertainties.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Standard pizza crust usually contains wheat/gluten, but no gluten restriction was provided.",
+              "Mozzarella and extra cheese indicate dairy; no dairy restriction was provided.",
+              "Pepperoni may contain hidden spices, preservatives, or casing ingredients that can occasionally involve allergens.",
+              "Cross-contamination risk is possible in a pizza kitchen due to shared ovens, flour, and utensils."
+            ],
+            "safe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ],
+            "unsafe_items": []
+          },
+          "latency_ms": 2262.3283863067627,
+          "tokens_used": {
+            "input": 410,
+            "output": 312,
+            "total": 722
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428964.3174233
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_009",
+      "test_name": "Specific cuisine - Indian",
+      "query": "Indian food with biryani",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 37.3382,
+              "lng": -121.8863,
+              "radius": 8000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 37.3382,
+              "lng": -121.8863,
+              "radius": 8000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.049591064453125,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428964.324114
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.84,
+          "passed": false,
+          "reasoning": "Both recommendations are within the $18 budget, but they do not match the user's clear request for Indian food with biryani. The items are pizza, which is off-cuisine and off-intent. They also do not support the user's stated Indian cuisine preference, and the selection lacks any relevant variety for the query.",
+          "details": {
+            "score": 1,
+            "reasoning": "Both recommendations are within the $18 budget, but they do not match the user's clear request for Indian food with biryani. The items are pizza, which is off-cuisine and off-intent. They also do not support the user's stated Indian cuisine preference, and the selection lacks any relevant variety for the query.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the user's $18 budget"
+            ],
+            "weaknesses": [
+              "Recommendations are not Indian cuisine",
+              "No biryani or related dish is included",
+              "Does not align with the user's cuisine preference",
+              "Lacks relevance and variety for the stated query"
+            ]
+          },
+          "latency_ms": 1457.9596519470215,
+          "tokens_used": {
+            "input": 351,
+            "output": 195,
+            "total": 546
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428965.7803164
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Margherita Pizza at Joe's Pizza is a very typical menu item for a pizzeria, and $12.99 is a reasonable price for a standard pie in a casual New York pizza shop. Pepperoni Pizza at Pizza Suprema is also a standard, plausible item, and $14.50 is reasonable for a specialty pizza in that market. The descriptions match what would be expected for these items. No ground truth was provided beyond typical restaurant norms, and both items fit those norms well.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Margherita Pizza at Joe's Pizza is a very typical menu item for a pizzeria, and $12.99 is a reasonable price for a standard pie in a casual New York pizza shop. Pepperoni Pizza at Pizza Suprema is also a standard, plausible item, and $14.50 is reasonable for a specialty pizza in that market. The descriptions match what would be expected for these items. No ground truth was provided beyond typical restaurant norms, and both items fit those norms well.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Classic and very plausible menu item for a pizzeria; price is in a normal range."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.97,
+                "notes": "Standard pizza item for a pizza restaurant; price is reasonable for the location and type."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1514.8553848266602,
+          "tokens_used": {
+            "input": 329,
+            "output": 306,
+            "total": 635
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428965.8359246
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "No user allergies or dietary restrictions were provided, so neither item is directly contraindicated. However, both pizzas commonly contain or are prepared with ingredients that can hide allergens, especially wheat/gluten in the crust and dairy in the cheese. Margherita pizza typically includes tomato, mozzarella, and dough; Pepperoni pizza adds pepperoni and extra cheese, which may contain additional preservatives/spices and is more likely to have hidden ingredients. Cross-contamination risk is also meaningful in pizza kitchens due to shared ovens, prep surfaces, and utensils, especially with wheat, dairy, soy, and possibly sesame or egg depending on the dough and kitchen practices. Because the user has no stated restrictions, these are not violations, but verification is still advisable if there are any unlisted sensitivities.",
+          "details": {
+            "score": 4,
+            "safe": true,
+            "reasoning": "No user allergies or dietary restrictions were provided, so neither item is directly contraindicated. However, both pizzas commonly contain or are prepared with ingredients that can hide allergens, especially wheat/gluten in the crust and dairy in the cheese. Margherita pizza typically includes tomato, mozzarella, and dough; Pepperoni pizza adds pepperoni and extra cheese, which may contain additional preservatives/spices and is more likely to have hidden ingredients. Cross-contamination risk is also meaningful in pizza kitchens due to shared ovens, prep surfaces, and utensils, especially with wheat, dairy, soy, and possibly sesame or egg depending on the dough and kitchen practices. Because the user has no stated restrictions, these are not violations, but verification is still advisable if there are any unlisted sensitivities.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Both items likely contain wheat/gluten in the crust.",
+              "Both items likely contain dairy in the mozzarella/extra cheese.",
+              "Pepperoni may contain hidden allergens such as soy, milk, or spices depending on the brand/preparation.",
+              "Cross-contamination risk in a shared pizza kitchen is possible for wheat, dairy, soy, and other allergens.",
+              "No ingredient list was provided beyond brief descriptions, so exact allergen verification is incomplete."
+            ],
+            "safe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ],
+            "unsafe_items": []
+          },
+          "latency_ms": 1786.8404388427734,
+          "tokens_used": {
+            "input": 410,
+            "output": 323,
+            "total": 733
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428966.1063838
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_010",
+      "test_name": "Lactose intolerance",
+      "query": "Coffee shop breakfast",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 47.6062,
+              "lng": -122.3321,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 47.6062,
+              "lng": -122.3321,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.04839897155761719,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428966.1131709
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for typical New York-style pizza restaurants. Joe's Pizza is well known for classic simple slices and pies, and a Margherita Pizza with tomato and mozzarella is entirely plausible at $12.99. Pizza Suprema is also a legitimate pizza restaurant, and a Pepperoni Pizza with extra cheese at $14.50 is a very reasonable price for a pizza shop in a major city. The descriptions match standard expectations for these items, and there is no ground truth to contradict them.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for typical New York-style pizza restaurants. Joe's Pizza is well known for classic simple slices and pies, and a Margherita Pizza with tomato and mozzarella is entirely plausible at $12.99. Pizza Suprema is also a legitimate pizza restaurant, and a Pepperoni Pizza with extra cheese at $14.50 is a very reasonable price for a pizza shop in a major city. The descriptions match standard expectations for these items, and there is no ground truth to contradict them.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.97,
+                "notes": "Classic menu item for a pizza restaurant; price is plausible."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very standard pizza offering; price is reasonable for the location and restaurant type."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1414.4728183746338,
+          "tokens_used": {
+            "input": 329,
+            "output": 287,
+            "total": 616
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428967.524865
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 0.9999999999999998,
+          "passed": false,
+          "reasoning": "The recommendations are a poor fit for the user's request. The query asks for coffee shop breakfast options, but both recommendations are pizza items from regular pizza restaurants, so they do not match the intended meal type or setting. Both items also exceed the $10 budget, and one includes mozzarella and extra cheese, which conflicts with the user's dairy and lactose allergies. There is no meaningful dietary or goal alignment, and the selection lacks variety for breakfast or coffee shop options.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are a poor fit for the user's request. The query asks for coffee shop breakfast options, but both recommendations are pizza items from regular pizza restaurants, so they do not match the intended meal type or setting. Both items also exceed the $10 budget, and one includes mozzarella and extra cheese, which conflicts with the user's dairy and lactose allergies. There is no meaningful dietary or goal alignment, and the selection lacks variety for breakfast or coffee shop options.",
+            "budget_score": 1,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "strengths": [
+              "Both items are straightforward, well-known food choices."
+            ],
+            "weaknesses": [
+              "Does not match coffee shop breakfast intent.",
+              "Both items are over the $10 budget.",
+              "Both items are likely unsuitable for dairy/lactose allergies.",
+              "No breakfast-specific or coffee-shop-specific diversity."
+            ]
+          },
+          "latency_ms": 1609.6789836883545,
+          "tokens_used": {
+            "input": 343,
+            "output": 258,
+            "total": 601
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428967.7214952
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are unsafe for a user with dairy and lactose allergies/restrictions. Margherita Pizza contains mozzarella, which is a dairy product and therefore directly conflicts with the stated allergies. Pepperoni Pizza contains extra cheese, which also indicates dairy; additionally, pepperoni pizzas often use cheese in the crust or toppings and may have other dairy-containing ingredients. Both pizzas also carry significant cross-contamination risk because they are typically prepared in environments handling cheese, butter, and dairy-based sauces. Because dairy/lactose is explicitly listed and both items clearly include dairy, these items should be rejected.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are unsafe for a user with dairy and lactose allergies/restrictions. Margherita Pizza contains mozzarella, which is a dairy product and therefore directly conflicts with the stated allergies. Pepperoni Pizza contains extra cheese, which also indicates dairy; additionally, pepperoni pizzas often use cheese in the crust or toppings and may have other dairy-containing ingredients. Both pizzas also carry significant cross-contamination risk because they are typically prepared in environments handling cheese, butter, and dairy-based sauces. Because dairy/lactose is explicitly listed and both items clearly include dairy, these items should be rejected.",
+            "allergen_matches": [
+              {
+                "item": "Margherita Pizza",
+                "allergen": "dairy",
+                "confidence": 0.99,
+                "source": "Description: 'Classic tomato and mozzarella' (mozzarella is dairy)"
+              },
+              {
+                "item": "Margherita Pizza",
+                "allergen": "lactose",
+                "confidence": 0.95,
+                "source": "Mozzarella cheese typically contains lactose"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "dairy",
+                "confidence": 0.99,
+                "source": "Description: 'Pepperoni with extra cheese' (extra cheese is dairy)"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "lactose",
+                "confidence": 0.95,
+                "source": "Extra cheese typically contains lactose"
+              }
+            ],
+            "restriction_violations": [],
+            "concerns": [
+              "Both pizzas likely have cross-contamination risk from shared prep surfaces, ovens, and utensils used for dairy-containing ingredients.",
+              "Margherita Pizza may also include cheese blends or finishing cheese beyond the stated mozzarella.",
+              "Pepperoni Pizza may include additional hidden dairy in crust, sauce, or seasoning depending on preparation."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 1893.1102752685547,
+          "tokens_used": {
+            "input": 412,
+            "output": 462,
+            "total": 874
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428968.0018184
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_011",
+      "test_name": "Keto diet",
+      "query": "Keto-friendly lunch",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 39.7392,
+              "lng": -104.9903,
+              "radius": 10000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 39.7392,
+              "lng": -104.9903,
+              "radius": 10000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.06580352783203125,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428968.010039
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple pies such as Margherita, and a $12.99 price is reasonable for a standard personal or small pie in a city restaurant setting. Pizza Suprema is also a well-known pizza shop where Pepperoni Pizza with extra cheese is entirely plausible, and $14.50 is a reasonable menu price. The descriptions match typical expectations for these items, and there is no ground truth to contradict them.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple pies such as Margherita, and a $12.99 price is reasonable for a standard personal or small pie in a city restaurant setting. Pizza Suprema is also a well-known pizza shop where Pepperoni Pizza with extra cheese is entirely plausible, and $14.50 is a reasonable menu price. The descriptions match typical expectations for these items, and there is no ground truth to contradict them.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.97,
+                "notes": "Classic menu item for a pizza shop; description matches a traditional margherita pizza."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very plausible for a pizzeria; pepperoni with extra cheese is standard and the price is believable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1339.4365310668945,
+          "tokens_used": {
+            "input": 329,
+            "output": 297,
+            "total": 626
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428969.3459363
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.84,
+          "passed": false,
+          "reasoning": "All items are within the $15 budget, but the recommendations are a poor fit for the user's keto/low-carb goals. Both pizzas are typically high in carbs due to the crust, and Margherita pizza also includes tomato sauce that adds carbs. While the query asks for a keto-friendly lunch, the results are not aligned with that intent and do not meaningfully support the user's nutrition target of max 20 carbs. Variety is also limited since both recommendations are similar pizza options.",
+          "details": {
+            "score": 1,
+            "reasoning": "All items are within the $15 budget, but the recommendations are a poor fit for the user's keto/low-carb goals. Both pizzas are typically high in carbs due to the crust, and Margherita pizza also includes tomato sauce that adds carbs. While the query asks for a keto-friendly lunch, the results are not aligned with that intent and do not meaningfully support the user's nutrition target of max 20 carbs. Variety is also limited since both recommendations are similar pizza options.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within budget",
+              "Both are lunch-appropriate meal options"
+            ],
+            "weaknesses": [
+              "Not keto-friendly or low-carb",
+              "Likely exceed the 20g carb target",
+              "Recommendations are too similar with little variety",
+              "Could include higher-protein, lower-carb options like salads, bunless burgers, grilled chicken, or cauliflower crust pizza"
+            ]
+          },
+          "latency_ms": 1548.699140548706,
+          "tokens_used": {
+            "input": 362,
+            "output": 235,
+            "total": 597
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428969.5568097
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are standard pizzas with a wheat-based crust, which is not compatible with keto or low-carb dietary restrictions. Margherita Pizza typically contains tomato sauce and mozzarella on a traditional dough crust; Pepperoni Pizza typically contains the same crust plus pepperoni and extra cheese. No user allergens are listed, so there is no direct allergen match to flag from the provided information. However, both items commonly contain or may be prepared with ingredients that can include hidden allergens such as gluten from the crust, dairy from cheese, and possible soy or wheat in processed pepperoni and sauces. Cross-contamination risk is also significant in a pizza kitchen due to shared ovens, surfaces, and utensils. Because the dietary restrictions are clearly violated, both items are unsafe.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are standard pizzas with a wheat-based crust, which is not compatible with keto or low-carb dietary restrictions. Margherita Pizza typically contains tomato sauce and mozzarella on a traditional dough crust; Pepperoni Pizza typically contains the same crust plus pepperoni and extra cheese. No user allergens are listed, so there is no direct allergen match to flag from the provided information. However, both items commonly contain or may be prepared with ingredients that can include hidden allergens such as gluten from the crust, dairy from cheese, and possible soy or wheat in processed pepperoni and sauces. Cross-contamination risk is also significant in a pizza kitchen due to shared ovens, surfaces, and utensils. Because the dietary restrictions are clearly violated, both items are unsafe.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Margherita Pizza",
+                "restriction": "keto",
+                "confidence": 0.99,
+                "reason": "Traditional pizza crust is high in carbohydrates and not keto-compatible."
+              },
+              {
+                "item": "Margherita Pizza",
+                "restriction": "low_carb",
+                "confidence": 0.99,
+                "reason": "Traditional pizza crust is high in carbohydrates and violates low-carb restrictions."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "keto",
+                "confidence": 0.99,
+                "reason": "Traditional pizza crust is high in carbohydrates and not keto-compatible."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "low_carb",
+                "confidence": 0.99,
+                "reason": "Traditional pizza crust is high in carbohydrates and violates low-carb restrictions."
+              }
+            ],
+            "concerns": [
+              "Traditional wheat crust almost certainly contains gluten and is not suitable for keto/low-carb.",
+              "Pepperoni and pizza sauces may contain hidden allergens or fillers such as soy, wheat, or dairy depending on the brand.",
+              "Cross-contamination risk is high in pizza preparation areas due to shared ovens, cutters, and prep surfaces."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 2116.9259548187256,
+          "tokens_used": {
+            "input": 414,
+            "output": 492,
+            "total": 906
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428970.1213753
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_012",
+      "test_name": "Nut allergy severe",
+      "query": "Find me dessert options",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 36.1699,
+              "lng": -115.1398,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 36.1699,
+              "lng": -115.1398,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.04935264587402344,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428970.128381
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.21,
+          "passed": false,
+          "reasoning": "The recommendations are a poor match for the user's request. The user asked for dessert options, but both recommendations are savory pizzas, so they do not satisfy the query intent. They also exceed the $12 budget, with both items priced above the limit. While there are no obvious conflicts with the user's allergies based on the listed ingredients, the recommendations do not support the requested meal type and offer no meaningful variety in desserts.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are a poor match for the user's request. The user asked for dessert options, but both recommendations are savory pizzas, so they do not satisfy the query intent. They also exceed the $12 budget, with both items priced above the limit. While there are no obvious conflicts with the user's allergies based on the listed ingredients, the recommendations do not support the requested meal type and offer no meaningful variety in desserts.",
+            "budget_score": 1,
+            "intent_score": 1,
+            "goal_score": 2,
+            "variety_score": 1,
+            "budget_violations": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "strengths": [
+              "No obvious nut ingredients are listed for the two pizza items.",
+              "Both items are simple, familiar menu options."
+            ],
+            "weaknesses": [
+              "Does not match the user's request for dessert options.",
+              "Both items are over the $12 budget.",
+              "No dessert items are included.",
+              "Very limited variety and not targeted to the user's meal type."
+            ]
+          },
+          "latency_ms": 1325.0808715820312,
+          "tokens_used": {
+            "input": 351,
+            "output": 262,
+            "total": 613
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428971.4519134
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the named pizzerias. Margherita Pizza at Joe's Pizza is a classic, very plausible menu item, and $12.99 is a reasonable price for a New York-style pizza slice/personal pizza depending on portion size. Pepperoni Pizza at Pizza Suprema is also a very typical offering, and $14.50 is a plausible price for a regular pizza in a New York pizza restaurant. The descriptions match standard expectations for these items. No ground truth list was provided, but based on typical restaurant menus, both items appear authentic and appropriate.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the named pizzerias. Margherita Pizza at Joe's Pizza is a classic, very plausible menu item, and $12.99 is a reasonable price for a New York-style pizza slice/personal pizza depending on portion size. Pepperoni Pizza at Pizza Suprema is also a very typical offering, and $14.50 is a plausible price for a regular pizza in a New York pizza restaurant. The descriptions match standard expectations for these items. No ground truth list was provided, but based on typical restaurant menus, both items appear authentic and appropriate.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Classic menu item for a pizzeria; description matches the standard tomato and mozzarella profile."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.94,
+                "notes": "Very typical pizza shop item; extra cheese is a common variation and the price is plausible."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1745.6669807434082,
+          "tokens_used": {
+            "input": 329,
+            "output": 311,
+            "total": 640
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428971.8708875
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "Both pizzas do not explicitly list any of the user's stated allergens (peanuts, tree nuts, almonds, cashews) in their descriptions, but there are important safety uncertainties. Pizza ingredients commonly involve shared preparation surfaces, ovens, and possible exposure to nut-containing ingredients in the kitchen. The Margherita Pizza is relatively simple and appears lower risk from a direct-ingredient standpoint, but cross-contamination cannot be ruled out. The Pepperoni Pizza includes pepperoni and extra cheese; while neither is a direct listed allergen, processed pepperoni can contain hidden spices, flavorings, or shared manufacturing risks, and extra cheese may increase exposure to dairy-related cross-contact though dairy is not a stated restriction. Because you requested a very conservative assessment, neither item can be confirmed as definitively safe without ingredient and cross-contact verification.",
+          "details": {
+            "score": 3,
+            "safe": false,
+            "reasoning": "Both pizzas do not explicitly list any of the user's stated allergens (peanuts, tree nuts, almonds, cashews) in their descriptions, but there are important safety uncertainties. Pizza ingredients commonly involve shared preparation surfaces, ovens, and possible exposure to nut-containing ingredients in the kitchen. The Margherita Pizza is relatively simple and appears lower risk from a direct-ingredient standpoint, but cross-contamination cannot be ruled out. The Pepperoni Pizza includes pepperoni and extra cheese; while neither is a direct listed allergen, processed pepperoni can contain hidden spices, flavorings, or shared manufacturing risks, and extra cheese may increase exposure to dairy-related cross-contact though dairy is not a stated restriction. Because you requested a very conservative assessment, neither item can be confirmed as definitively safe without ingredient and cross-contact verification.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Cross-contamination risk from shared pizza prep surfaces, ovens, cutters, and gloves.",
+              "Pepperoni may contain hidden spices, seasonings, or additives that are not fully disclosed.",
+              "Need confirmation that sauces, dough, cheese, and toppings are produced in a nut-free facility or with allergen controls.",
+              "Need verification that no nut-based pestos, garnishes, oils, or specialty ingredients are used in the kitchen."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 1843.1236743927002,
+          "tokens_used": {
+            "input": 419,
+            "output": 335,
+            "total": 754
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428971.9667728
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_013",
+      "test_name": "Vegetarian Indian",
+      "query": "Vegetarian Indian food",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 29.7604,
+              "lng": -95.3698,
+              "radius": 8000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 29.7604,
+              "lng": -95.3698,
+              "radius": 8000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.09250640869140625,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428971.9766648
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.84,
+          "passed": false,
+          "reasoning": "While both items are within the $16 budget, the recommendations do not match the user's request for vegetarian Indian food. Both are pizza items, and one is pepperoni, which is not vegetarian. Overall, the recommendations miss the user's cuisine and dietary requirements, so relevance is poor.",
+          "details": {
+            "score": 1,
+            "reasoning": "While both items are within the $16 budget, the recommendations do not match the user's request for vegetarian Indian food. Both are pizza items, and one is pepperoni, which is not vegetarian. Overall, the recommendations miss the user's cuisine and dietary requirements, so relevance is poor.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the user's $16 budget"
+            ],
+            "weaknesses": [
+              "No Indian food is recommended",
+              "One item contains pepperoni and is not vegetarian",
+              "Recommendations do not align with the user's cuisine preference",
+              "Very limited variety and poor relevance to the query"
+            ]
+          },
+          "latency_ms": 1087.2864723205566,
+          "tokens_used": {
+            "input": 349,
+            "output": 188,
+            "total": 537
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428973.061581
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the stated pizza restaurants. Margherita Pizza and Pepperoni Pizza are classic, standard menu items for New York-style pizzerias. The prices are also reasonable for typical pizza-shop pricing in New York City: $12.99 for a Margherita pizza and $14.50 for a pepperoni pizza are both plausible, especially for individual/small pies. The descriptions match what would be expected for these items. No ground truth was provided, so verification is based on common restaurant menu conventions and plausibility.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the stated pizza restaurants. Margherita Pizza and Pepperoni Pizza are classic, standard menu items for New York-style pizzerias. The prices are also reasonable for typical pizza-shop pricing in New York City: $12.99 for a Margherita pizza and $14.50 for a pepperoni pizza are both plausible, especially for individual/small pies. The descriptions match what would be expected for these items. No ground truth was provided, so verification is based on common restaurant menu conventions and plausibility.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "A classic menu item for a pizza restaurant; description matches standard ingredients."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very common pizza shop item; extra cheese is a plausible variation and the price is reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1705.5482864379883,
+          "tokens_used": {
+            "input": 329,
+            "output": 321,
+            "total": 650
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428973.6783378
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Margherita Pizza is typically vegetarian and does not inherently contain the stated allergen (none), but it commonly includes mozzarella cheese, which is safe for a vegetarian diet. However, pizza dough may contain dairy, egg, or be prepared on shared surfaces, so cross-contamination is possible. Pepperoni Pizza is not vegetarian because pepperoni is a meat topping, so it clearly violates the dietary restriction. Because one item is definitely non-compliant and the other has typical preparation/cross-contamination uncertainties, the overall set is not safe.",
+          "details": {
+            "score": 2,
+            "safe": false,
+            "reasoning": "Margherita Pizza is typically vegetarian and does not inherently contain the stated allergen (none), but it commonly includes mozzarella cheese, which is safe for a vegetarian diet. However, pizza dough may contain dairy, egg, or be prepared on shared surfaces, so cross-contamination is possible. Pepperoni Pizza is not vegetarian because pepperoni is a meat topping, so it clearly violates the dietary restriction. Because one item is definitely non-compliant and the other has typical preparation/cross-contamination uncertainties, the overall set is not safe.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "vegetarian",
+                "confidence": 1.0,
+                "reason": "Pepperoni is a meat product, so this item is not vegetarian."
+              }
+            ],
+            "concerns": [
+              "Margherita Pizza may be prepared with shared utensils, ovens, or surfaces that also contact meat toppings.",
+              "Pizza dough, sauce, or cheese may contain hidden allergens depending on restaurant preparation, though none are explicitly listed here.",
+              "Need verification that no animal-derived rennet or non-vegetarian cheese additives are used if strict vegetarian standards apply."
+            ],
+            "safe_items": [
+              "Margherita Pizza"
+            ],
+            "unsafe_items": [
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 1858.2935333251953,
+          "tokens_used": {
+            "input": 410,
+            "output": 310,
+            "total": 720
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428973.8289716
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_014",
+      "test_name": "Soy allergy Asian food",
+      "query": "Asian restaurant",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 32.7157,
+              "lng": -117.1611,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 32.7157,
+              "lng": -117.1611,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.057697296142578125,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428973.8366477
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 2.1199999999999997,
+          "passed": false,
+          "reasoning": "Both recommendations are within the $20 budget, but they do not match the user's request for an Asian restaurant. They are Italian-style pizza items, which is a major mismatch for query intent. They also do not account for the user's soy allergy in any meaningful way, since ingredients and preparation details are not provided. Variety is limited because both options are pizzas from similar places, offering little diversity.",
+          "details": {
+            "score": 1,
+            "reasoning": "Both recommendations are within the $20 budget, but they do not match the user's request for an Asian restaurant. They are Italian-style pizza items, which is a major mismatch for query intent. They also do not account for the user's soy allergy in any meaningful way, since ingredients and preparation details are not provided. Variety is limited because both options are pizzas from similar places, offering little diversity.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 2,
+            "variety_score": 2,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are under the $20 budget",
+              "Items are simple and easy to understand"
+            ],
+            "weaknesses": [
+              "Does not match the requested Asian restaurant category",
+              "No soy-allergy consideration",
+              "Limited variety and both recommendations are very similar",
+              "Recommendations are not well targeted to the user's intent"
+            ]
+          },
+          "latency_ms": 1146.3253498077393,
+          "tokens_used": {
+            "input": 340,
+            "output": 205,
+            "total": 545
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428974.9816866
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the stated restaurants and fit typical New York-style pizza shop menus. Margherita Pizza at Joe's Pizza is a classic, commonly offered item, and $12.99 is a reasonable price for a standard slice/individual pie in a casual NYC pizza restaurant, depending on size. Pepperoni Pizza at Pizza Suprema is also a very plausible menu item, and $14.50 is a reasonable price for a pepperoni pizza at a well-known Manhattan pizzeria. The descriptions are standard and match what would be expected. No ground truth was provided, so verification is based on typical restaurant menu knowledge.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the stated restaurants and fit typical New York-style pizza shop menus. Margherita Pizza at Joe's Pizza is a classic, commonly offered item, and $12.99 is a reasonable price for a standard slice/individual pie in a casual NYC pizza restaurant, depending on size. Pepperoni Pizza at Pizza Suprema is also a very plausible menu item, and $14.50 is a reasonable price for a pepperoni pizza at a well-known Manhattan pizzeria. The descriptions are standard and match what would be expected. No ground truth was provided, so verification is based on typical restaurant menu knowledge.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very plausible classic menu item for Joe's Pizza; description matches standard margherita pizza."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Very plausible and typical for Pizza Suprema; price is reasonable for a New York pizzeria."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1804.1810989379883,
+          "tokens_used": {
+            "input": 329,
+            "output": 321,
+            "total": 650
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428975.6378999
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both items are pizza-based and therefore not definitively safe for a soy-allergic user without ingredient verification. The descriptions do not explicitly list soy, but typical pizza dough, sauce, cheese blends, pepperoni, and seasoning mixes may contain soy-derived ingredients such as soybean oil, soy flour, soy lecithin, or processed additives. Cross-contamination is also a concern in pizza preparation environments due to shared dough prep surfaces, ovens, cutters, and topping stations. Margherita Pizza is lower risk than Pepperoni Pizza, but neither can be confirmed safe from the provided information. Because the instruction is to be very conservative, both items should be treated as unsafe or requiring verification.",
+          "details": {
+            "score": 2,
+            "safe": false,
+            "reasoning": "Both items are pizza-based and therefore not definitively safe for a soy-allergic user without ingredient verification. The descriptions do not explicitly list soy, but typical pizza dough, sauce, cheese blends, pepperoni, and seasoning mixes may contain soy-derived ingredients such as soybean oil, soy flour, soy lecithin, or processed additives. Cross-contamination is also a concern in pizza preparation environments due to shared dough prep surfaces, ovens, cutters, and topping stations. Margherita Pizza is lower risk than Pepperoni Pizza, but neither can be confirmed safe from the provided information. Because the instruction is to be very conservative, both items should be treated as unsafe or requiring verification.",
+            "allergen_matches": [
+              {
+                "item": "Margherita Pizza",
+                "allergen": "soy (possible hidden ingredient)",
+                "confidence": 0.54,
+                "source": "typical pizza ingredients and preparation may include soy in dough, sauce, cheese, or shared prep surfaces"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "soy (possible hidden ingredient)",
+                "confidence": 0.72,
+                "source": "pepperoni and extra cheese commonly contain additives or processing aids that may include soy; typical pizza prep also carries soy cross-contact risk"
+              }
+            ],
+            "restriction_violations": [],
+            "concerns": [
+              "No ingredient list provided for the pizza crust, sauce, cheese, or pepperoni.",
+              "Pizza dough may contain soy flour, soy oil, or dough conditioners.",
+              "Pizza sauce and pepperoni can contain soy-based additives or hidden flavorings.",
+              "Cross-contamination risk from shared ovens, cutters, gloves, and prep surfaces.",
+              "Extra cheese on Pepperoni Pizza increases processing/ingredient uncertainty."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 2062.7951622009277,
+          "tokens_used": {
+            "input": 410,
+            "output": 431,
+            "total": 841
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428975.8947823
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_015",
+      "test_name": "Halal only",
+      "query": "Mediterranean dinner",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 33.749,
+              "lng": -84.388,
+              "radius": 10000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 33.749,
+              "lng": -84.388,
+              "radius": 10000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.049591064453125,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428975.90099
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.84,
+          "passed": false,
+          "reasoning": "Both recommendations are within budget, but they do not match the user's request for a Mediterranean dinner or their stated Mediterranean/Middle Eastern cuisine preferences. Pizza is not a good fit for the query intent, and the items do not support halal/no_pork goals reliably since ingredient sourcing is unclear. Variety is also limited because both items are very similar and from the same general category.",
+          "details": {
+            "score": 1,
+            "reasoning": "Both recommendations are within budget, but they do not match the user's request for a Mediterranean dinner or their stated Mediterranean/Middle Eastern cuisine preferences. Pizza is not a good fit for the query intent, and the items do not support halal/no_pork goals reliably since ingredient sourcing is unclear. Variety is also limited because both items are very similar and from the same general category.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are under the $22 budget",
+              "Simple, familiar options"
+            ],
+            "weaknesses": [
+              "Does not match Mediterranean dinner intent",
+              "Does not reflect Mediterranean or Middle Eastern cuisine preferences",
+              "Halal suitability is not established",
+              "Very limited variety, with both recommendations being pizzas"
+            ]
+          },
+          "latency_ms": 1237.7510070800781,
+          "tokens_used": {
+            "input": 359,
+            "output": 210,
+            "total": 569
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428977.1373773
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the restaurant type. Joe's Pizza commonly fits a classic New York pizzeria menu where a Margherita Pizza with tomato and mozzarella is standard, and $12.99 is a plausible price. Pizza Suprema is also a well-known pizza place where a Pepperoni Pizza with extra cheese is entirely expected, and $14.50 is a reasonable price for a specialty pizza in a city setting. The descriptions match typical menu wording and there is no ground-truth conflict provided, so both items are considered verified as plausible recommendations.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the restaurant type. Joe's Pizza commonly fits a classic New York pizzeria menu where a Margherita Pizza with tomato and mozzarella is standard, and $12.99 is a plausible price. Pizza Suprema is also a well-known pizza place where a Pepperoni Pizza with extra cheese is entirely expected, and $14.50 is a reasonable price for a specialty pizza in a city setting. The descriptions match typical menu wording and there is no ground-truth conflict provided, so both items are considered verified as plausible recommendations.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.92,
+                "notes": "Classic menu item for a pizzeria; description matches standard ingredients."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.94,
+                "notes": "Very typical offering for a pizza restaurant; extra cheese is a common modifier."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1494.3432807922363,
+          "tokens_used": {
+            "input": 329,
+            "output": 298,
+            "total": 627
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428977.3926501
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Margherita Pizza is not known to contain pork and is typically halal-compatible if the cheese and sauce contain only halal-acceptable ingredients, but this cannot be fully verified from the description alone. Pepperoni Pizza is likely unsafe because pepperoni is typically made from pork or a pork/beef blend and is therefore incompatible with the user's no_pork restriction; it is also not reliably halal unless specifically halal-certified. Both pizzas may also involve cross-contamination in a kitchen that handles pork toppings, and the cheese/sauce/crust could contain hidden non-halal additives or enzymes that require verification. Given the conservative requirement, the Pepperoni Pizza is treated as unsafe and the Margherita Pizza remains uncertain rather than definitively safe.",
+          "details": {
+            "score": 2,
+            "safe": false,
+            "reasoning": "Margherita Pizza is not known to contain pork and is typically halal-compatible if the cheese and sauce contain only halal-acceptable ingredients, but this cannot be fully verified from the description alone. Pepperoni Pizza is likely unsafe because pepperoni is typically made from pork or a pork/beef blend and is therefore incompatible with the user's no_pork restriction; it is also not reliably halal unless specifically halal-certified. Both pizzas may also involve cross-contamination in a kitchen that handles pork toppings, and the cheese/sauce/crust could contain hidden non-halal additives or enzymes that require verification. Given the conservative requirement, the Pepperoni Pizza is treated as unsafe and the Margherita Pizza remains uncertain rather than definitively safe.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "no_pork",
+                "confidence": 0.98,
+                "reason": "Pepperoni is typically made from pork or a pork-containing meat blend."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "halal",
+                "confidence": 0.95,
+                "reason": "Pepperoni is usually not halal unless explicitly certified halal."
+              }
+            ],
+            "concerns": [
+              "Margherita Pizza ingredients are not fully specified; cheese may use animal rennet or enzymes that require halal verification.",
+              "Pizza crust or sauce may contain hidden non-halal additives depending on preparation.",
+              "Cross-contamination risk is possible if the kitchen handles pork toppings such as pepperoni.",
+              "Pepperoni Pizza may also contain other non-halal ingredients beyond the meat itself."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Pepperoni Pizza",
+              "Margherita Pizza"
+            ]
+          },
+          "latency_ms": 2117.6648139953613,
+          "tokens_used": {
+            "input": 414,
+            "output": 401,
+            "total": 815
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428978.0144906
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_016",
+      "test_name": "Low sodium diet",
+      "query": "Healthy lunch low sodium",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 35.2271,
+              "lng": -80.8431,
+              "radius": 8000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 35.2271,
+              "lng": -80.8431,
+              "radius": 8000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.07009506225585938,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428978.0217104
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.42,
+          "passed": false,
+          "reasoning": "The recommendations are a poor match for the user\u2019s request for a healthy, low-sodium lunch. One item exceeds the budget, and both items are pizza, which is typically high in sodium and not well aligned with the user's explicit low-sodium target of 500 mg max. The selection lacks healthy lunch variety and does not meaningfully address the dietary goal.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are a poor match for the user\u2019s request for a healthy, low-sodium lunch. One item exceeds the budget, and both items are pizza, which is typically high in sodium and not well aligned with the user's explicit low-sodium target of 500 mg max. The selection lacks healthy lunch variety and does not meaningfully address the dietary goal.",
+            "budget_score": 2,
+            "intent_score": 2,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "strengths": [
+              "One item is within budget",
+              "Both items are simple, familiar lunch options"
+            ],
+            "weaknesses": [
+              "One item is over budget",
+              "Both options are pizza, so variety is very limited",
+              "Pizza is generally not a strong fit for a low-sodium diet",
+              "Pepperoni and extra cheese are especially likely to exceed sodium targets",
+              "Recommendations do not strongly match the user's request for a healthy lunch"
+            ]
+          },
+          "latency_ms": 1425.6742000579834,
+          "tokens_used": {
+            "input": 360,
+            "output": 252,
+            "total": 612
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428979.4454465
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the stated restaurants. Joe's Pizza commonly serves a classic Margherita Pizza, and a $12.99 price is reasonable for a standard slice/pizza item depending on size and location. Pizza Suprema is also a well-known pizza restaurant where Pepperoni Pizza with extra cheese is a very plausible menu item, and $14.50 is a reasonable price for a specialty pizza in a New York-style pizzeria context. The descriptions match what would be expected for these items. No ground truth menu was provided, but based on typical restaurant menus these items are authentic and plausible.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the stated restaurants. Joe's Pizza commonly serves a classic Margherita Pizza, and a $12.99 price is reasonable for a standard slice/pizza item depending on size and location. Pizza Suprema is also a well-known pizza restaurant where Pepperoni Pizza with extra cheese is a very plausible menu item, and $14.50 is a reasonable price for a specialty pizza in a New York-style pizzeria context. The descriptions match what would be expected for these items. No ground truth menu was provided, but based on typical restaurant menus these items are authentic and plausible.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.94,
+                "notes": "Classic menu item for a pizza shop; description matches standard ingredients."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Very typical pizza shop item; price is plausible for a specialty pizza."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1566.274642944336,
+          "tokens_used": {
+            "input": 329,
+            "output": 317,
+            "total": 646
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428979.5847044
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are pizzas, which commonly contain or are prepared with high-sodium ingredients. Margherita pizza typically includes tomato sauce and mozzarella, both of which can contribute significant sodium; pepperoni pizza is especially high in sodium due to pepperoni and extra cheese. No user allergens were reported, so there is no direct allergen match based on the provided information, but typical pizza preparation also raises cross-contamination concerns for common allergens such as wheat, milk, and possible shared equipment. Because the user has a low-sodium restriction, both items are likely to violate the restriction and should be treated as unsafe unless a specifically low-sodium version is verified.",
+          "details": {
+            "score": 2,
+            "safe": false,
+            "reasoning": "Both recommended items are pizzas, which commonly contain or are prepared with high-sodium ingredients. Margherita pizza typically includes tomato sauce and mozzarella, both of which can contribute significant sodium; pepperoni pizza is especially high in sodium due to pepperoni and extra cheese. No user allergens were reported, so there is no direct allergen match based on the provided information, but typical pizza preparation also raises cross-contamination concerns for common allergens such as wheat, milk, and possible shared equipment. Because the user has a low-sodium restriction, both items are likely to violate the restriction and should be treated as unsafe unless a specifically low-sodium version is verified.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Margherita Pizza",
+                "restriction": "low_sodium",
+                "confidence": 0.89,
+                "reason": "Typical tomato sauce and mozzarella on pizza are usually high in sodium; restaurant preparation often adds additional salt."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "low_sodium",
+                "confidence": 0.99,
+                "reason": "Pepperoni is a processed cured meat that is typically very high in sodium, and extra cheese adds more sodium."
+              }
+            ],
+            "concerns": [
+              "Pizza crust typically contains wheat/gluten; although no allergies were reported, cross-contact is common.",
+              "Mozzarella is dairy and may be a hidden allergen concern in general.",
+              "Tomato sauce may contain added salt and/or preservatives.",
+              "Pepperoni often contains additional additives and preservatives that can raise sodium further.",
+              "Cross-contamination risk in pizza kitchens is common due to shared ovens, pans, cutters, and preparation surfaces."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 1920.2473163604736,
+          "tokens_used": {
+            "input": 412,
+            "output": 418,
+            "total": 830
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428979.9369295
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_017",
+      "test_name": "Egg allergy breakfast",
+      "query": "Breakfast near me",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 39.9526,
+              "lng": -75.1652,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 39.9526,
+              "lng": -75.1652,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.05245208740234375,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428979.9437711
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the restaurant types and align with typical New York-style pizza shop menus. Joe's Pizza commonly offers a Margherita Pizza, and $12.99 is a plausible price for a standard pie or individual serving depending on location/size. Pizza Suprema is also well known for classic pizza offerings, and Pepperoni Pizza at $14.50 is a reasonable price for a specialty pie in a city restaurant setting. The descriptions are standard and match expectations. No ground truth conflicts were provided, and both items are authentic-sounding menu entries.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the restaurant types and align with typical New York-style pizza shop menus. Joe's Pizza commonly offers a Margherita Pizza, and $12.99 is a plausible price for a standard pie or individual serving depending on location/size. Pizza Suprema is also well known for classic pizza offerings, and Pepperoni Pizza at $14.50 is a reasonable price for a specialty pie in a city restaurant setting. The descriptions are standard and match expectations. No ground truth conflicts were provided, and both items are authentic-sounding menu entries.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.93,
+                "notes": "Very plausible menu item for Joe's Pizza; description matches a classic margherita pizza."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Highly plausible for Pizza Suprema; pepperoni with extra cheese is a standard offering and the price is reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1722.658634185791,
+          "tokens_used": {
+            "input": 329,
+            "output": 331,
+            "total": 660
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428981.663168
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 0.9999999999999998,
+          "passed": false,
+          "reasoning": "The recommendations are a poor fit for the query and user constraints. Both items are pizza rather than breakfast options, so they do not match the user's intent. Neither item is within the $12 budget, and one includes pepperoni, which is fine for the listed allergy but still irrelevant to breakfast needs. There is also limited variety since both recommendations are similar pizza items.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are a poor fit for the query and user constraints. Both items are pizza rather than breakfast options, so they do not match the user's intent. Neither item is within the $12 budget, and one includes pepperoni, which is fine for the listed allergy but still irrelevant to breakfast needs. There is also limited variety since both recommendations are similar pizza items.",
+            "budget_score": 1,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "strengths": [
+              "Both items are straightforward menu selections.",
+              "Margherita pizza avoids egg ingredients based on the description."
+            ],
+            "weaknesses": [
+              "No breakfast items are recommended.",
+              "Both items exceed the user's $12 budget.",
+              "Recommendations are not well aligned to the user's search intent.",
+              "Very limited variety; both suggestions are pizzas."
+            ]
+          },
+          "latency_ms": 1755.0199031829834,
+          "tokens_used": {
+            "input": 341,
+            "output": 248,
+            "total": 589
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428981.6967545
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "Both recommended pizzas are not definitively safe for an egg-allergic user. Margherita pizza typically contains pizza dough, which may include egg in some recipes, and mozzarella/ tomato toppings do not themselves suggest egg, but hidden egg is possible in the crust or dough preparation. Pepperoni pizza has the same dough risk plus extra cheese; pepperoni can also contain egg-derived ingredients or be processed with cross-contact risks depending on the supplier. Because typical pizza preparation often involves shared equipment, flour-dusted surfaces, and mixed ingredient handling, cross-contamination with egg cannot be ruled out. With no explicit ingredient list or allergen statement, both items require verification and should be treated as unsafe under a conservative policy.",
+          "details": {
+            "score": 2,
+            "safe": false,
+            "reasoning": "Both recommended pizzas are not definitively safe for an egg-allergic user. Margherita pizza typically contains pizza dough, which may include egg in some recipes, and mozzarella/ tomato toppings do not themselves suggest egg, but hidden egg is possible in the crust or dough preparation. Pepperoni pizza has the same dough risk plus extra cheese; pepperoni can also contain egg-derived ingredients or be processed with cross-contact risks depending on the supplier. Because typical pizza preparation often involves shared equipment, flour-dusted surfaces, and mixed ingredient handling, cross-contamination with egg cannot be ruled out. With no explicit ingredient list or allergen statement, both items require verification and should be treated as unsafe under a conservative policy.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Pizza dough/crust may contain egg depending on recipe.",
+              "Shared ovens, cutters, prep surfaces, and utensils can cause cross-contamination.",
+              "Pepperoni and cheese toppings may be prepared in facilities handling egg-containing foods.",
+              "No ingredient list or allergen disclosure provided, so hidden egg cannot be excluded."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 2154.9785137176514,
+          "tokens_used": {
+            "input": 410,
+            "output": 283,
+            "total": 693
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428982.0940676
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_018",
+      "test_name": "Paleo diet",
+      "query": "Paleo lunch options",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 45.5152,
+              "lng": -122.6784,
+              "radius": 8000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 45.5152,
+              "lng": -122.6784,
+              "radius": 8000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.08463859558105469,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428982.1042655
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.84,
+          "passed": false,
+          "reasoning": "The recommendations stay within budget, but they do not match the user's query or dietary restriction. Both items are pizza with cheese and flour-based crust, which are not paleo-friendly and do not qualify as good paleo lunch options. The selection is also narrow and lacks variety.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations stay within budget, but they do not match the user's query or dietary restriction. Both items are pizza with cheese and flour-based crust, which are not paleo-friendly and do not qualify as good paleo lunch options. The selection is also narrow and lacks variety.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the $18 budget"
+            ],
+            "weaknesses": [
+              "Items are not paleo-friendly",
+              "Recommendations do not match the user's paleo lunch intent",
+              "Limited variety; both options are similar pizza dishes",
+              "No clear support for dietary goals"
+            ]
+          },
+          "latency_ms": 1125.32377243042,
+          "tokens_used": {
+            "input": 342,
+            "output": 181,
+            "total": 523
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428983.2261386
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 4.5,
+          "passed": true,
+          "reasoning": "Both recommended items are realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple pies like Margherita Pizza, and Pizza Suprema commonly offers standard pizzas such as Pepperoni Pizza. The descriptions are consistent with typical menu language. The prices also appear reasonable for New York City pizza restaurants, though Joe's Pizza pricing could vary by location and slice/pie size, so there may be a small discrepancy depending on whether this is a full pie or slice. No ground truth menu was provided, so verification is based on plausibility rather than exact matching.",
+          "details": {
+            "score": 4,
+            "reasoning": "Both recommended items are realistic for classic New York-style pizza restaurants. Joe's Pizza is well known for simple pies like Margherita Pizza, and Pizza Suprema commonly offers standard pizzas such as Pepperoni Pizza. The descriptions are consistent with typical menu language. The prices also appear reasonable for New York City pizza restaurants, though Joe's Pizza pricing could vary by location and slice/pie size, so there may be a small discrepancy depending on whether this is a full pie or slice. No ground truth menu was provided, so verification is based on plausibility rather than exact matching.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.92,
+                "notes": "Highly plausible item for Joe's Pizza. Description matches a standard margherita pizza. Price is reasonable if this is a small pie or entry-level menu item, though exact pricing may vary by location and size."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very typical menu item for Pizza Suprema. Pepperoni pizza with extra cheese is plausible and the price is reasonable for a New York pizza shop."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [
+              "Margherita Pizza at Joe's Pizza - exact price may vary by location and portion size"
+            ],
+            "issues": [
+              "No ground truth menu was provided, so exact matching cannot be confirmed",
+              "Price for Joe's Pizza may depend on whether the item is a slice, personal pie, or whole pie"
+            ]
+          },
+          "latency_ms": 1799.7517585754395,
+          "tokens_used": {
+            "input": 329,
+            "output": 418,
+            "total": 747
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428983.8986816
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are not safe for a paleo diet. Margherita Pizza contains cheese (mozzarella), and Pepperoni Pizza contains cheese and pepperoni, both of which are non-paleo processed dairy/meat products and typical pizza crust is grain-based, which is also not paleo. Even though no user allergens are listed, both items carry significant hidden allergen and cross-contamination risk due to common pizza ingredients and shared kitchen preparation (wheat/gluten, dairy, possible soy in cheese/pepperoni, and shared ovens/cutters). Based on the provided descriptions and typical preparation, these items should be treated as unsafe for the user's dietary restriction.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are not safe for a paleo diet. Margherita Pizza contains cheese (mozzarella), and Pepperoni Pizza contains cheese and pepperoni, both of which are non-paleo processed dairy/meat products and typical pizza crust is grain-based, which is also not paleo. Even though no user allergens are listed, both items carry significant hidden allergen and cross-contamination risk due to common pizza ingredients and shared kitchen preparation (wheat/gluten, dairy, possible soy in cheese/pepperoni, and shared ovens/cutters). Based on the provided descriptions and typical preparation, these items should be treated as unsafe for the user's dietary restriction.",
+            "allergen_matches": [],
+            "restriction_violations": [
+              {
+                "item": "Margherita Pizza",
+                "restriction": "paleo",
+                "confidence": 0.99,
+                "reason": "Typically made with wheat-based crust and topped with mozzarella cheese; both are not paleo."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "paleo",
+                "confidence": 0.99,
+                "reason": "Typically made with wheat-based crust, mozzarella cheese, and processed pepperoni; all are not paleo."
+              }
+            ],
+            "concerns": [
+              "Typical pizza crust is wheat-based and therefore incompatible with paleo.",
+              "Mozzarella cheese is dairy and not paleo.",
+              "Pepperoni is a processed meat that may contain preservatives, fillers, and hidden allergens.",
+              "Possible cross-contamination with gluten, dairy, soy, and other allergens in a pizza kitchen is likely."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 2247.8113174438477,
+          "tokens_used": {
+            "input": 410,
+            "output": 387,
+            "total": 797
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428984.345036
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_019",
+      "test_name": "Fish allergy sushi",
+      "query": "Japanese food",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 40.4406,
+              "lng": -79.9959,
+              "radius": 5000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 40.4406,
+              "lng": -79.9959,
+              "radius": 5000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.05078315734863281,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428984.3531663
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 1.9100000000000001,
+          "passed": false,
+          "reasoning": "Both recommendations are within the $25 budget, but they do not match the user's request for Japanese food. The items are pizza, which is unrelated to the query, and they do not address any specific dietary or nutrition goals. Variety is also limited since both options are similar pizza dishes from Italian-style restaurants.",
+          "details": {
+            "score": 1,
+            "reasoning": "Both recommendations are within the $25 budget, but they do not match the user's request for Japanese food. The items are pizza, which is unrelated to the query, and they do not address any specific dietary or nutrition goals. Variety is also limited since both options are similar pizza dishes from Italian-style restaurants.",
+            "budget_score": 5,
+            "intent_score": 1,
+            "goal_score": 1,
+            "variety_score": 2,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are within the user's budget",
+              "Prices are clearly listed"
+            ],
+            "weaknesses": [
+              "Does not match the user's request for Japanese food",
+              "No consideration of the user's fish and shellfish allergies",
+              "Limited variety; both recommendations are pizzas",
+              "Poor alignment with the user's intended cuisine"
+            ]
+          },
+          "latency_ms": 1509.1323852539062,
+          "tokens_used": {
+            "input": 343,
+            "output": 199,
+            "total": 542
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428985.8607094
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 3.0,
+          "passed": false,
+          "reasoning": "Both recommended items do not explicitly contain fish or shellfish based on the names and descriptions provided. Margherita Pizza (tomato and mozzarella) is generally free of the listed allergens. Pepperoni Pizza is also typically fish/shellfish-free, but processed pepperoni and pizza preparation can involve hidden ingredients, shared ovens, cutlery, or cross-contact with seafood toppings in some kitchens. No dietary restrictions are listed beyond fish/shellfish avoidance, so there are no direct restriction violations. Because ingredients and preparation details are limited, there is a minor uncertainty due to possible cross-contamination or undisclosed additives, but no direct allergen match is evident.",
+          "details": {
+            "score": 4,
+            "safe": true,
+            "reasoning": "Both recommended items do not explicitly contain fish or shellfish based on the names and descriptions provided. Margherita Pizza (tomato and mozzarella) is generally free of the listed allergens. Pepperoni Pizza is also typically fish/shellfish-free, but processed pepperoni and pizza preparation can involve hidden ingredients, shared ovens, cutlery, or cross-contact with seafood toppings in some kitchens. No dietary restrictions are listed beyond fish/shellfish avoidance, so there are no direct restriction violations. Because ingredients and preparation details are limited, there is a minor uncertainty due to possible cross-contamination or undisclosed additives, but no direct allergen match is evident.",
+            "allergen_matches": [],
+            "restriction_violations": [],
+            "concerns": [
+              "Cross-contamination risk from shared pizza prep surfaces, ovens, peelers, or slicers.",
+              "Pepperoni may contain unspecified seasonings or processing aids that should be verified, though fish/shellfish is not typical.",
+              "Restaurant-specific recipes could include seafood-based toppings/sauces in the same area or shared equipment."
+            ],
+            "safe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ],
+            "unsafe_items": []
+          },
+          "latency_ms": 1826.3428211212158,
+          "tokens_used": {
+            "input": 413,
+            "output": 274,
+            "total": 687
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428986.1737206
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for classic New York-style pizza shops. Margherita Pizza at Joe's Pizza is a very plausible menu item, and $12.99 is a reasonable price for a standard pie in a casual NYC pizzeria. Pepperoni Pizza at Pizza Suprema is also a very plausible item, and $14.50 is within a normal range for a specialty pizza at a well-known New York pizza place. The descriptions match typical expectations: Margherita is usually tomato and mozzarella, and pepperoni with extra cheese is a common style. No ground truth was provided, so verification is based on typical restaurant menu knowledge.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for classic New York-style pizza shops. Margherita Pizza at Joe's Pizza is a very plausible menu item, and $12.99 is a reasonable price for a standard pie in a casual NYC pizzeria. Pepperoni Pizza at Pizza Suprema is also a very plausible item, and $14.50 is within a normal range for a specialty pizza at a well-known New York pizza place. The descriptions match typical expectations: Margherita is usually tomato and mozzarella, and pepperoni with extra cheese is a common style. No ground truth was provided, so verification is based on typical restaurant menu knowledge.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "A classic menu item for a pizza restaurant; description is accurate and price is plausible."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Very typical pizza shop item; extra cheese is a common modifier and the price is reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza",
+              "Pepperoni Pizza at Pizza Suprema"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 2003.7074089050293,
+          "tokens_used": {
+            "input": 329,
+            "output": 321,
+            "total": 650
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428986.352575
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    },
+    {
+      "test_id": "test_020",
+      "test_name": "Complex multi-restriction",
+      "query": "Dinner recommendations",
+      "latency_seconds": 0.0,
+      "agent_result": {
+        "success": true,
+        "recommendations": [
+          {
+            "name": "Margherita Pizza",
+            "restaurant": "Joe's Pizza",
+            "price": "$12.99",
+            "description": "Classic tomato and mozzarella",
+            "location": {
+              "lat": 25.7617,
+              "lng": -80.1918,
+              "radius": 10000
+            }
+          },
+          {
+            "name": "Pepperoni Pizza",
+            "restaurant": "Pizza Suprema",
+            "price": "$14.50",
+            "description": "Pepperoni with extra cheese",
+            "location": {
+              "lat": 25.7617,
+              "lng": -80.1918,
+              "radius": 10000
+            }
+          }
+        ],
+        "metadata": {
+          "model": "gpt-5.4-mini",
+          "tokens": {
+            "input": 500,
+            "output": 300,
+            "total": 800
+          }
+        }
+      },
+      "judge_results": {
+        "geo_location": {
+          "eval_name": "geo_location",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "2/2 restaurants within 10.0 miles",
+          "details": {
+            "score": 5,
+            "reasoning": "2/2 restaurants within 10.0 miles",
+            "distances": {
+              "Joe's Pizza": 0.0,
+              "Pizza Suprema": 0.0
+            },
+            "in_range": [
+              "Joe's Pizza",
+              "Pizza Suprema"
+            ],
+            "out_of_range": [],
+            "max_distance_miles": 10.0
+          },
+          "latency_ms": 0.05555152893066406,
+          "tokens_used": null,
+          "model_used": "programmatic",
+          "timestamp": 1790428986.360213
+        },
+        "ground_truth": {
+          "eval_name": "ground_truth",
+          "score": 5.0,
+          "passed": true,
+          "reasoning": "Both recommended items are highly realistic for the restaurant type. Joe's Pizza commonly serves classic New York-style pizzas such as Margherita, and Pizza Suprema is also well known for standard pizza offerings including pepperoni. The listed prices are reasonable for typical NYC pizza shop pricing, and the descriptions match what one would expect for these items. No ground truth was provided, but based on typical menus these items are plausible and authentic.",
+          "details": {
+            "score": 5,
+            "reasoning": "Both recommended items are highly realistic for the restaurant type. Joe's Pizza commonly serves classic New York-style pizzas such as Margherita, and Pizza Suprema is also well known for standard pizza offerings including pepperoni. The listed prices are reasonable for typical NYC pizza shop pricing, and the descriptions match what one would expect for these items. No ground truth was provided, but based on typical menus these items are plausible and authentic.",
+            "item_verification": [
+              {
+                "item": "Margherita Pizza at Joe's Pizza - $12.99",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.95,
+                "notes": "Classic menu item for a pizzeria; price is plausible."
+              },
+              {
+                "item": "Pepperoni Pizza at Pizza Suprema - $14.50",
+                "exists": true,
+                "price_reasonable": true,
+                "confidence": 0.96,
+                "notes": "Very typical offering for Pizza Suprema; price is reasonable."
+              }
+            ],
+            "verified_items": [
+              "Margherita Pizza at Joe's Pizza - $12.99",
+              "Pepperoni Pizza at Pizza Suprema - $14.50"
+            ],
+            "questionable_items": [],
+            "issues": []
+          },
+          "latency_ms": 1574.6355056762695,
+          "tokens_used": {
+            "input": 329,
+            "output": 286,
+            "total": 615
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428987.9317372
+        },
+        "relevance": {
+          "eval_name": "relevance",
+          "score": 2.26,
+          "passed": false,
+          "reasoning": "The recommendations are within budget and loosely match the dinner query, but they are a very poor fit for the user's dietary needs. Both items contain gluten and dairy, and one includes meat, which violates the user's vegan restriction. Neither item is soy-free compliant in any meaningful verified way, and both are far below the protein target of at least 25g per meal. Overall, the list is not aligned with the user's allergies, diet, or nutrition goals.",
+          "details": {
+            "score": 1,
+            "reasoning": "The recommendations are within budget and loosely match the dinner query, but they are a very poor fit for the user's dietary needs. Both items contain gluten and dairy, and one includes meat, which violates the user's vegan restriction. Neither item is soy-free compliant in any meaningful verified way, and both are far below the protein target of at least 25g per meal. Overall, the list is not aligned with the user's allergies, diet, or nutrition goals.",
+            "budget_score": 5,
+            "intent_score": 3,
+            "goal_score": 1,
+            "variety_score": 1,
+            "budget_violations": [],
+            "strengths": [
+              "Both items are under the $20 budget",
+              "Both are dinner-appropriate meal options in a general sense"
+            ],
+            "weaknesses": [
+              "Both items contain gluten and dairy, violating allergies",
+              "Neither item is vegan; one includes meat and the other includes cheese",
+              "Protein target of at least 25g is not met",
+              "Limited variety; both recommendations are pizza"
+            ]
+          },
+          "latency_ms": 1641.5374279022217,
+          "tokens_used": {
+            "input": 362,
+            "output": 244,
+            "total": 606
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428988.0002213
+        },
+        "dietary_safety": {
+          "eval_name": "dietary_safety",
+          "score": 1.0,
+          "passed": false,
+          "reasoning": "Both recommended items are unsafe for this user. Margherita Pizza contains mozzarella, which is dairy and violates the user's dairy allergy and vegan restriction. Pizza crust is typically made with wheat flour, which contains gluten and violates the user's gluten allergy. Pepperoni Pizza contains pepperoni and extra cheese; pepperoni is not vegan and typically contains meat and often dairy-derived or other animal-derived ingredients, while extra cheese is dairy. The crust is also typically wheat-based and therefore contains gluten. Both items also carry cross-contamination risk from shared pizza prep surfaces, ovens, cutters, and cheese/meat handling. No item can be considered safe based on the provided descriptions.",
+          "details": {
+            "score": 1,
+            "safe": false,
+            "reasoning": "Both recommended items are unsafe for this user. Margherita Pizza contains mozzarella, which is dairy and violates the user's dairy allergy and vegan restriction. Pizza crust is typically made with wheat flour, which contains gluten and violates the user's gluten allergy. Pepperoni Pizza contains pepperoni and extra cheese; pepperoni is not vegan and typically contains meat and often dairy-derived or other animal-derived ingredients, while extra cheese is dairy. The crust is also typically wheat-based and therefore contains gluten. Both items also carry cross-contamination risk from shared pizza prep surfaces, ovens, cutters, and cheese/meat handling. No item can be considered safe based on the provided descriptions.",
+            "allergen_matches": [
+              {
+                "item": "Margherita Pizza",
+                "allergen": "dairy",
+                "confidence": 0.99,
+                "source": "description: 'Classic tomato and mozzarella'"
+              },
+              {
+                "item": "Margherita Pizza",
+                "allergen": "gluten",
+                "confidence": 0.95,
+                "source": "typical pizza crust preparation (wheat flour crust)"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "dairy",
+                "confidence": 0.98,
+                "source": "description: 'Pepperoni with extra cheese'"
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "allergen": "gluten",
+                "confidence": 0.95,
+                "source": "typical pizza crust preparation (wheat flour crust)"
+              }
+            ],
+            "restriction_violations": [
+              {
+                "item": "Margherita Pizza",
+                "restriction": "vegan",
+                "confidence": 0.99,
+                "reason": "Contains mozzarella, a dairy animal product."
+              },
+              {
+                "item": "Margherita Pizza",
+                "restriction": "no_soy",
+                "confidence": 0.2,
+                "reason": "No soy is explicit in the description, but pizza dough/sauce or cheese alternatives can sometimes contain soy; this cannot be verified from the given information."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "vegan",
+                "confidence": 1.0,
+                "reason": "Pepperoni is a meat topping and extra cheese is dairy."
+              },
+              {
+                "item": "Pepperoni Pizza",
+                "restriction": "no_soy",
+                "confidence": 0.2,
+                "reason": "No soy is explicit in the description, but ingredients such as dough conditioners, oils, or processed toppings may contain soy; this cannot be verified from the given information."
+              }
+            ],
+            "concerns": [
+              "Typical pizza crust is made with wheat flour, so gluten is very likely present in both items.",
+              "Mozzarella and extra cheese are dairy ingredients and unsafe for a dairy allergy and vegan restriction.",
+              "Pepperoni is a meat product and unsafe for vegan restriction.",
+              "Possible cross-contamination with dairy, wheat/gluten, and meat on shared prep surfaces, ovens, and utensils.",
+              "Hidden ingredients may exist in dough, sauce, or seasoning blends, including soy-based additives or dairy-derived ingredients."
+            ],
+            "safe_items": [],
+            "unsafe_items": [
+              "Margherita Pizza",
+              "Pepperoni Pizza"
+            ]
+          },
+          "latency_ms": 3105.8876514434814,
+          "tokens_used": {
+            "input": 416,
+            "output": 734,
+            "total": 1150
+          },
+          "model_used": "gpt-5.4-mini",
+          "timestamp": 1790428989.4613898
+        }
+      },
+      "passed": false,
+      "critical_failure": true
+    }
+  ],
+  "summary": {
+    "total_tests": 20,
+    "passed": 1,
+    "failed": 19,
+    "pass_rate": 5.0,
+    "critical_failures": 19,
+    "judge_scores": {
+      "dietary_safety": {
+        "mean_score": 1.9,
+        "min_score": 1.0,
+        "max_score": 5.0,
+        "passed_count": 1,
+        "total_count": 20,
+        "threshold": 5
+      },
+      "ground_truth": {
+        "mean_score": 4.92,
+        "min_score": 4.5,
+        "max_score": 5.0,
+        "passed_count": 20,
+        "total_count": 20,
+        "threshold": 4
+      },
+      "relevance": {
+        "mean_score": 1.9,
+        "min_score": 0.9999999999999998,
+        "max_score": 4.35,
+        "passed_count": 1,
+        "total_count": 20,
+        "threshold": 3
+      },
+      "geo_location": {
+        "mean_score": 5.0,
+        "min_score": 5.0,
+        "max_score": 5.0,
+        "passed_count": 20,
+        "total_count": 20,
+        "threshold": 4
+      }
+    },
+    "latency_metrics": {
+      "eval_name": "latency",
+      "passed": true,
+      "metrics": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "mean": 0.0,
+        "max": 0.0,
+        "min": 0.0,
+        "count": 20
+      },
+      "thresholds": {
+        "p50_max": 5.0,
+        "p95_max": 10.0
+      },
+      "violations": {
+        "p50_exceeded": false,
+        "p95_exceeded": false
+      },
+      "summary": "P50: 0.00s, P95: 0.00s (max P50: 5.0s, max P95: 10.0s)"
+    },
+    "token_metrics": {
+      "eval_name": "token_usage",
+      "passed": false,
+      "metrics": {
+        "total_tokens": 56198,
+        "input_tokens": 31823,
+        "output_tokens": 24375,
+        "total_cost_usd": 0.0129,
+        "avg_cost_per_call": 0.0002,
+        "num_calls": 80
+      },
+      "by_model": {
+        "gpt-5.4-mini": {
+          "input_tokens": 31823,
+          "output_tokens": 24375,
+          "total_tokens": 56198,
+          "cost": 0.012932299999999996,
+          "calls": 80
+        }
+      },
+      "thresholds": {
+        "max_tokens": 50000,
+        "max_cost_usd": 0.1
+      },
+      "violations": {
+        "tokens_exceeded": true,
+        "cost_exceeded": false
+      },
+      "summary": "Total: 56198 tokens, $0.0129 (max: 50000 tokens, $0.10)"
+    }
+  }
+}
