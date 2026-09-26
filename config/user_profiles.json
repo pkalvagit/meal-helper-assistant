@@ -1,6 +1,6 @@
 {
   "example_user": {
-    "name": "John Doe",
+    "name": "User1",
     "allergies": ["peanuts", "shellfish"],
     "dietary_restrictions": ["no_beef", "no_pork"],
     "preferences": {
@@ -24,7 +24,7 @@
     }
   },
   "vegan_user": {
-    "name": "Jane Smith",
+    "name": "VeganUser",
     "allergies": [],
     "dietary_restrictions": ["vegan"],
     "preferences": {

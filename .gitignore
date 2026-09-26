@@ -40,3 +40,8 @@ Thumbs.db
 
 cache/*
 logs/*
+
+# User Data (Privacy Protection)
+config/user_profiles.json
+config/user_*.json
+!config/user_profiles.json.example
